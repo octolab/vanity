@@ -88,6 +88,10 @@
 	name = go.octolab.org/toolset/try
 	path = src/try
 	url = git@github.com:octolab/try.git
+[submodule "src/tuna"]
+    name = go.octolab.org/toolset/tuna
+	path = src/tuna
+	url = git@github.com:octomation/tuna.git
 
 [submodule "src/inboxes/github"]
 	name = go.octolab.org/tact/inbox/github
