@@ -1,11 +1,17 @@
 # shellcheck source=modules.bash # modules
 
-compile() {
-  mkdir -p dist && rm -rf dist/*
-  modules | tee dist/modules.yml
+compile() (
+  local build
+  build=$(mktemp -d "${root}/.dist.XXXXXX") || return
+  trap 'rm -rf "${build}"' EXIT
+  modules >"${build}/modules.yml" || return
 
-  pushd dist >/dev/null || exit 1
-  maintainer go vanity build -f modules.yml
-  tree .
-  popd >/dev/null || exit 1
+  maintainer go vanity build -f "${build}/modules.yml" "${build}" || return
+  python3 "${root}/bin/verify.py" "${build}" || return
+  rm -rf "${root}/dist"
+  mv "${build}" "${root}/dist"
+)
+
+verify() {
+  python3 "${root}/bin/verify.py" "${root}/dist"
 }
