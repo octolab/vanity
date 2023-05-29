@@ -18,11 +18,11 @@
 [submodule "src/beads"]
 	name = go.octolab.org/ecosystem/beads
 	path = src/beads
-	url = git@github.com:tact-app/beads.git
+	url = git@github.com:octopot/beads.git
 [submodule "src/click"]
 	name = go.octolab.org/ecosystem/click
 	path = src/click
-	url = git@github.com:tact-app/click.git
+	url = git@github.com:octopot/click.git
 [submodule "src/forma"]
 	name = go.octolab.org/ecosystem/forma
 	path = src/forma
@@ -51,7 +51,7 @@
 [submodule "src/airseat"]
 	name = go.octolab.org/toolset/airseat
 	path = src/airseat
-	url = git@github.com:tact-app/airseat.git
+	url = git@github.com:octopot/airseat.git
 [submodule "src/breakit"]
 	name = go.octolab.org/toolset/breakit
 	path = src/breakit
@@ -59,11 +59,11 @@
 [submodule "src/fiddle"]
 	name = go.octolab.org/toolset/fiddle
 	path = src/fiddle
-	url = git@github.com:withsparkle/fiddle.git
+	url = git@github.com:octopot/fiddle.git
 [submodule "src/loop"]
 	name = go.octolab.org/toolset/loop
 	path = src/loop
-	url = git@github.com:tact-app/loop.git
+	url = git@github.com:octopot/loop.git
 [submodule "src/maintainer"]
 	name = go.octolab.org/toolset/maintainer
 	path = src/maintainer
@@ -71,7 +71,7 @@
 [submodule "src/optflow"]
 	name = go.octolab.org/toolset/optflow
 	path = src/optflow
-	url = git@github.com:tact-app/optflow.git
+	url = git@github.com:octomation/optflow.git
 [submodule "src/parallel"]
 	name = go.octolab.org/toolset/parallel
 	path = src/parallel
@@ -79,7 +79,7 @@
 [submodule "src/secret"]
 	name = go.octolab.org/toolset/secret
 	path = src/secret
-	url = git@github.com:tact-app/secret.git
+	url = git@github.com:octomation/secret.git
 [submodule "src/testit"]
 	name = go.octolab.org/toolset/testit
 	path = src/testit
