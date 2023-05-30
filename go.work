@@ -1,7 +1,8 @@
-go 1.25.0
+go 1.26.0
 
-toolchain go1.25.5
+toolchain go1.27.1
 
+// Local development selection. Publication uses every entry in .gitmodules.
 use (
 	//./src/airseat
 	//./src/beads
@@ -27,6 +28,7 @@ use (
 	//./src/propaganda
 	//./src/protocol
 	//./src/secret
+	//./src/sparkle
 	//./src/tablo
 	//./src/tact
 	//./src/testit
