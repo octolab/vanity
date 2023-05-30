@@ -60,6 +60,10 @@
 	name = go.octolab.org/toolset/fiddle
 	path = src/fiddle
 	url = git@github.com:octopot/fiddle.git
+[submodule "src/indexit"]
+	name = go.octolab.org/toolset/indexit
+	path = src/indexit
+	url = git@github.com:octopot/indexit.git
 [submodule "src/loop"]
 	name = go.octolab.org/toolset/loop
 	path = src/loop

@@ -19,6 +19,7 @@ use (
 	//./src/inbox
 	//./src/inboxes/github
 	//./src/inboxes/trello
+	//./src/indexit
 	//./src/loop
 	//./src/maintainer
 	//./src/optflow
