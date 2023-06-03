@@ -6,6 +6,8 @@ on:
     paths:
       - '.github/workflows/cd.urls.yml'
       - 'bin/lib/**/*.bash'
+      - 'bin/verify.py'
+      - '.gitmodules'
       - 'src/**/*'
       - 'go.work'
       - 'Makefile'
@@ -26,32 +28,67 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Building
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
 
     steps:
+      - name: Check submodule credentials
+        env:
+          SUBMODULE_TOKEN: ${{ secrets.DEPENDABOT_TOKEN }}
+        run: |
+          if [ -z "$SUBMODULE_TOKEN" ]; then
+            echo '::error::DEPENDABOT_TOKEN must have read access to the private repositories in .gitmodules.'
+            exit 1
+          fi
       - name: Checkout the repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           submodules: true
           token: ${{ secrets.DEPENDABOT_TOKEN }}
+          persist-credentials: false
       - name: Install dependencies
-        run: curl -sSfL https://install.octolab.org/maintainer | sh -s -- -b /usr/local/bin -dx
+        env:
+          MAINTAINER_VERSION: 0.1.0-rc11
+        run: |
+          release="https://github.com/octomation/maintainer/releases/download/v${MAINTAINER_VERSION}"
+          archive="maintainer_${MAINTAINER_VERSION}_linux-amd64.tar.gz"
+          mkdir -p "$RUNNER_TEMP/maintainer"
+          cd "$RUNNER_TEMP/maintainer"
+          curl --fail --show-error --location --retry 3 "$release/$archive" -o "$archive"
+          curl --fail --show-error --location --retry 3 "$release/checksums.txt" -o checksums.txt
+          sha256sum --check --ignore-missing checksums.txt
+          tar -xzf "$archive" maintainer
+          echo "$RUNNER_TEMP/maintainer" >> "$GITHUB_PATH"
       - name: Set up GitHub Pages
-        uses: actions/configure-pages@v4.0.0
+        uses: actions/configure-pages@v6.0.0
+        id: pages
+      - name: Check the custom domain
+        env:
+          PAGES_HOST: ${{ steps.pages.outputs.host }}
+        run: |
+          if [ "$PAGES_HOST" != go.octolab.org ]; then
+            echo '::error::Set go.octolab.org as the custom domain in Settings > Pages before deploying.'
+            exit 1
+          fi
       - name: Set up Go environment
-        uses: actions/setup-go@v5.0.0
-        with: { go-version: 1.21.x, cache-dependency-path: src/*/go.sum, check-latest: true }
+        uses: actions/setup-go@v7.0.0
+        with: { go-version-file: go.work, cache: false }
 
       - name: Build static HTML
         run: make
         env:
           GITHUB_TOKEN: ${{ secrets.DEPENDABOT_TOKEN }}
       - name: Upload the documentation
-        uses: actions/upload-pages-artifact@v3.0.1
+        uses: actions/upload-pages-artifact@v5.0.0
         with: { path: dist }
 
   deploy:
@@ -69,7 +106,7 @@ jobs:
     steps:
       - name: Deploy it to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4.0.4
+        uses: actions/deploy-pages@v5.0.1
 
   notify:
     name: Notifying
@@ -79,7 +116,7 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v7.0.1
         with: { fetch-depth: 0 }
 
       - name: Send notification

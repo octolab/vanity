@@ -13,6 +13,9 @@ on:
     workflows: [ Workflow caches cleanup ]
     types: [ completed ]
 
+permissions:
+  contents: read
+
 jobs:
   cache:
     name: Caching Go modules
@@ -20,16 +23,17 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           submodules: true
           token: ${{ secrets.DEPENDABOT_TOKEN }}
+          persist-credentials: false
       - name: Set up Go environment
-        uses: actions/setup-go@v5.0.0
-        with: { go-version: 1.21.x, cache-dependency-path: src/*/go.sum, check-latest: true }
+        uses: actions/setup-go@v7.0.0
+        with: { go-version-file: go.work, cache: false }
 
-      - name: Fetch dependencies
+      - name: Check module discovery without downloading dependencies
         run: make list
         env:
           GITHUB_TOKEN: ${{ secrets.DEPENDABOT_TOKEN }}
@@ -42,7 +46,7 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v7.0.1
         with: { fetch-depth: 0 }
 
       - name: Send notification
