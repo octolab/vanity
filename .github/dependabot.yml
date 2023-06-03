@@ -1,12 +1,5 @@
 version: 2
 
-registries:
-  github:
-    type: git
-    url: https://github.com
-    username: x-access-token
-    password: ${{ secrets.DEPENDABOT_TOKEN }}
-
 updates:
   - package-ecosystem: github-actions
     directory: /
@@ -20,22 +13,5 @@ updates:
       - 'scope: deps'
     commit-message:
       prefix: 'ci/cd'
-      include: 'scope'
-    open-pull-requests-limit: 30
-
-  - package-ecosystem: gitsubmodule
-    registries:
-      - github
-    directory: /
-    schedule:
-      interval: daily
-      time: '05:00'
-      timezone: UTC
-    labels:
-      - 'type: improvement'
-      - 'scope: code'
-      - 'scope: deps'
-    commit-message:
-      prefix: 'feat'
       include: 'scope'
     open-pull-requests-limit: 30
