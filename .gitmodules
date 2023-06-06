@@ -1,128 +1,128 @@
-[submodule "src/go-module"]
+[submodule "src/template/module"]
 	name = go.octolab.org/template/module
-	path = src/go-module
+	path = src/template/module
 	url = git@github.com:octomation/go-module.git
-[submodule "src/go-tool"]
+[submodule "src/template/tool"]
 	name = go.octolab.org/template/tool
-	path = src/go-tool
+	path = src/template/tool
 	url = git@github.com:octomation/go-tool.git
-[submodule "src/go-service"]
+[submodule "src/template/service"]
 	name = go.octolab.org/template/service
-	path = src/go-service
+	path = src/template/service
 	url = git@github.com:octomation/go-service.git
-[submodule "src/inbox"]
+[submodule "src/template/inbox"]
 	name = go.octolab.org/template/inbox
-	path = src/inbox
+	path = src/template/inbox
 	url = git@github.com:tact-app/inbox.git
 
-[submodule "src/beads"]
+[submodule "src/ecosystem/beads"]
 	name = go.octolab.org/ecosystem/beads
-	path = src/beads
+	path = src/ecosystem/beads
 	url = git@github.com:octopot/beads.git
-[submodule "src/click"]
+[submodule "src/ecosystem/click"]
 	name = go.octolab.org/ecosystem/click
-	path = src/click
+	path = src/ecosystem/click
 	url = git@github.com:octopot/click.git
-[submodule "src/forma"]
+[submodule "src/ecosystem/forma"]
 	name = go.octolab.org/ecosystem/forma
-	path = src/forma
+	path = src/ecosystem/forma
 	url = git@github.com:octopot/forma.git
-[submodule "src/guard"]
+[submodule "src/ecosystem/guard"]
 	name = go.octolab.org/ecosystem/guard
-	path = src/guard
+	path = src/ecosystem/guard
 	url = git@github.com:octopot/guard.git
-[submodule "src/passport"]
+[submodule "src/ecosystem/passport"]
 	name = go.octolab.org/ecosystem/passport
-	path = src/passport
+	path = src/ecosystem/passport
 	url = git@github.com:octopot/passport.git
-[submodule "src/sparkle"]
+[submodule "src/ecosystem/sparkle"]
 	name = go.octolab.org/ecosystem/sparkle
-	path = src/sparkle
+	path = src/ecosystem/sparkle
 	url = git@github.com:withsparkle/service.git
 [submodule "src/tablo"]
 	name = go.octolab.org/ecosystem/tablo
 	path = src/tablo
 	url = git@github.com:octomation/tablo.git
-[submodule "src/tact"]
+[submodule "src/ecosystem/tact"]
 	name = go.octolab.org/ecosystem/tact
-	path = src/tact
+	path = src/ecosystem/tact
 	url = git@github.com:tact-app/service.git
 
-[submodule "src/airseat"]
+[submodule "src/toolset/airseat"]
 	name = go.octolab.org/toolset/airseat
-	path = src/airseat
+	path = src/toolset/airseat
 	url = git@github.com:octopot/airseat.git
-[submodule "src/breakit"]
+[submodule "src/toolset/breakit"]
 	name = go.octolab.org/toolset/breakit
-	path = src/breakit
+	path = src/toolset/breakit
 	url = git@github.com:octolab/breakit.git
-[submodule "src/fiddle"]
+[submodule "src/toolset/fiddle"]
 	name = go.octolab.org/toolset/fiddle
-	path = src/fiddle
+	path = src/toolset/fiddle
 	url = git@github.com:octopot/fiddle.git
-[submodule "src/indexit"]
+[submodule "src/toolset/indexit"]
 	name = go.octolab.org/toolset/indexit
-	path = src/indexit
+	path = src/toolset/indexit
 	url = git@github.com:octopot/indexit.git
-[submodule "src/loop"]
+[submodule "src/toolset/loop"]
 	name = go.octolab.org/toolset/loop
-	path = src/loop
+	path = src/toolset/loop
 	url = git@github.com:octopot/loop.git
-[submodule "src/maintainer"]
+[submodule "src/toolset/maintainer"]
 	name = go.octolab.org/toolset/maintainer
-	path = src/maintainer
+	path = src/toolset/maintainer
 	url = git@github.com:octomation/maintainer.git
-[submodule "src/optflow"]
+[submodule "src/toolset/optflow"]
 	name = go.octolab.org/toolset/optflow
-	path = src/optflow
+	path = src/toolset/optflow
 	url = git@github.com:octomation/optflow.git
-[submodule "src/parallel"]
+[submodule "src/toolset/parallel"]
 	name = go.octolab.org/toolset/parallel
-	path = src/parallel
+	path = src/toolset/parallel
 	url = git@github.com:octolab/parallel.git
-[submodule "src/secret"]
+[submodule "src/toolset/secret"]
 	name = go.octolab.org/toolset/secret
-	path = src/secret
+	path = src/toolset/secret
 	url = git@github.com:octomation/secret.git
-[submodule "src/testit"]
+[submodule "src/toolset/testit"]
 	name = go.octolab.org/toolset/testit
-	path = src/testit
+	path = src/toolset/testit
 	url = git@github.com:octolab/testit.git
-[submodule "src/try"]
+[submodule "src/toolset/try"]
 	name = go.octolab.org/toolset/try
-	path = src/try
+	path = src/toolset/try
 	url = git@github.com:octolab/try.git
-[submodule "src/tuna"]
+[submodule "src/toolset/tuna"]
     name = go.octolab.org/toolset/tuna
-	path = src/tuna
+	path = src/toolset/tuna
 	url = git@github.com:octomation/tuna.git
 
-[submodule "src/inboxes/github"]
+[submodule "src/tact/inbox/github"]
 	name = go.octolab.org/tact/inbox/github
-	path = src/inboxes/github
+	path = src/tact/inbox/github
 	url = git@github.com:tact-app/github.git
-[submodule "src/inboxes/trello"]
+[submodule "src/tact/inbox/trello"]
 	name = go.octolab.org/tact/inbox/trello
-	path = src/inboxes/trello
+	path = src/tact/inbox/trello
 	url = git@github.com:tact-app/trello.git
 
 [submodule "src/pkg"]
 	name = go.octolab.org
 	path = src/pkg
 	url = git@github.com:octolab/pkg.git
-[submodule "src/cli"]
+[submodule "src/toolkit/cli"]
 	name = go.octolab.org/toolkit/cli
-	path = src/cli
+	path = src/toolkit/cli
 	url = git@github.com:octolab/cli.git
-[submodule "src/config"]
+[submodule "src/toolkit/config"]
 	name = go.octolab.org/toolkit/config
-	path = src/config
+	path = src/toolkit/config
 	url = git@github.com:octolab/config.git
 [submodule "src/propaganda"]
 	name = go.octolab.org/propaganda
 	path = src/propaganda
 	url = git@github.com:octolab/propaganda.git
-[submodule "src/protocol"]
+[submodule "src/toolkit/protocol"]
 	name = go.octolab.org/toolkit/protocol
-	path = src/protocol
+	path = src/toolkit/protocol
 	url = git@github.com:octolab/protocol.git
