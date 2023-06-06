@@ -35,4 +35,5 @@ use (
 	//./src/toolset/testit
 	//./src/toolset/try
 	./src/toolset/tuna
+	//./src/ecosystem/tablo
 )

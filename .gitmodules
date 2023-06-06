@@ -126,3 +126,7 @@
 	name = go.octolab.org/toolkit/protocol
 	path = src/toolkit/protocol
 	url = git@github.com:octolab/protocol.git
+[submodule "src/ecosystem/tablo"]
+	name = go.octolab.org/ecosystem/tablo
+	path = src/ecosystem/tablo
+	url = git@github.com:octopot/tablo.git
