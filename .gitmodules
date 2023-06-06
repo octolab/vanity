@@ -134,3 +134,7 @@
 	name = go.octolab.org/toolset/dotapps
 	path = src/toolset/dotapps
 	url = git@github.com:octomation/dotapps.git
+[submodule "src/ecosystem/telemost"]
+	name = go.octolab.org/ecosystem/telemost
+	path = src/ecosystem/telemost
+	url = git@github.com:octopot/telemost.git

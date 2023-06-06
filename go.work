@@ -37,4 +37,5 @@ use (
 	./src/toolset/tuna
 	//./src/ecosystem/tablo
 	//./src/toolset/dotapps
+	//./src/ecosystem/telemost
 )
