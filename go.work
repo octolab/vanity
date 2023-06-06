@@ -30,7 +30,7 @@ use (
 	//./src/toolkit/protocol
 	//./src/toolset/secret
 	//./src/ecosystem/sparkle
-	//./src/tablo
+	//./src/toolset/tablo
 	//./src/ecosystem/tact
 	//./src/toolset/testit
 	//./src/toolset/try

@@ -39,9 +39,9 @@
 	name = go.octolab.org/ecosystem/sparkle
 	path = src/ecosystem/sparkle
 	url = git@github.com:withsparkle/service.git
-[submodule "src/tablo"]
-	name = go.octolab.org/ecosystem/tablo
-	path = src/tablo
+[submodule "src/toolset/tablo"]
+	name = go.octolab.org/toolset/tablo
+	path = src/toolset/tablo
 	url = git@github.com:octomation/tablo.git
 [submodule "src/ecosystem/tact"]
 	name = go.octolab.org/ecosystem/tact
