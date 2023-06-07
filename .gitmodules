@@ -34,6 +34,10 @@
 	name = go.octolab.org/ecosystem/telemost
 	path = src/ecosystem/telemost
 	url = git@github.com:octopot/telemost.git
+[submodule "src/genome"]
+	name = go.octolab.org/genome
+	path = src/genome
+	url = git@github.com:octolab/genome.git
 [submodule "src/pkg"]
 	name = go.octolab.org
 	path = src/pkg

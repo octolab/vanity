@@ -13,6 +13,7 @@ use (
 	//./src/ecosystem/tablo
 	//./src/ecosystem/tact
 	//./src/ecosystem/telemost
+	//./src/genome
 	//./src/pkg
 	//./src/propaganda
 	//./src/tact/inbox/github
