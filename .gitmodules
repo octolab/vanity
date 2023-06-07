@@ -1,20 +1,3 @@
-[submodule "src/template/module"]
-	name = go.octolab.org/template/module
-	path = src/template/module
-	url = git@github.com:octomation/go-module.git
-[submodule "src/template/tool"]
-	name = go.octolab.org/template/tool
-	path = src/template/tool
-	url = git@github.com:octomation/go-tool.git
-[submodule "src/template/service"]
-	name = go.octolab.org/template/service
-	path = src/template/service
-	url = git@github.com:octomation/go-service.git
-[submodule "src/template/inbox"]
-	name = go.octolab.org/template/inbox
-	path = src/template/inbox
-	url = git@github.com:tact-app/inbox.git
-
 [submodule "src/ecosystem/beads"]
 	name = go.octolab.org/ecosystem/beads
 	path = src/ecosystem/beads
@@ -39,15 +22,62 @@
 	name = go.octolab.org/ecosystem/sparkle
 	path = src/ecosystem/sparkle
 	url = git@github.com:withsparkle/service.git
-[submodule "src/toolset/tablo"]
-	name = go.octolab.org/toolset/tablo
-	path = src/toolset/tablo
-	url = git@github.com:octomation/tablo.git
+[submodule "src/ecosystem/tablo"]
+	name = go.octolab.org/ecosystem/tablo
+	path = src/ecosystem/tablo
+	url = git@github.com:octopot/tablo.git
 [submodule "src/ecosystem/tact"]
 	name = go.octolab.org/ecosystem/tact
 	path = src/ecosystem/tact
 	url = git@github.com:tact-app/service.git
-
+[submodule "src/ecosystem/telemost"]
+	name = go.octolab.org/ecosystem/telemost
+	path = src/ecosystem/telemost
+	url = git@github.com:octopot/telemost.git
+[submodule "src/pkg"]
+	name = go.octolab.org
+	path = src/pkg
+	url = git@github.com:octolab/pkg.git
+[submodule "src/propaganda"]
+	name = go.octolab.org/propaganda
+	path = src/propaganda
+	url = git@github.com:octolab/propaganda.git
+[submodule "src/tact/inbox/github"]
+	name = go.octolab.org/tact/inbox/github
+	path = src/tact/inbox/github
+	url = git@github.com:tact-app/github.git
+[submodule "src/tact/inbox/trello"]
+	name = go.octolab.org/tact/inbox/trello
+	path = src/tact/inbox/trello
+	url = git@github.com:tact-app/trello.git
+[submodule "src/template/inbox"]
+	name = go.octolab.org/template/inbox
+	path = src/template/inbox
+	url = git@github.com:tact-app/inbox.git
+[submodule "src/template/module"]
+	name = go.octolab.org/template/module
+	path = src/template/module
+	url = git@github.com:octomation/go-module.git
+[submodule "src/template/service"]
+	name = go.octolab.org/template/service
+	path = src/template/service
+	url = git@github.com:octomation/go-service.git
+[submodule "src/template/tool"]
+	name = go.octolab.org/template/tool
+	path = src/template/tool
+	url = git@github.com:octomation/go-tool.git
+[submodule "src/toolkit/cli"]
+	name = go.octolab.org/toolkit/cli
+	path = src/toolkit/cli
+	url = git@github.com:octolab/cli.git
+[submodule "src/toolkit/config"]
+	name = go.octolab.org/toolkit/config
+	path = src/toolkit/config
+	url = git@github.com:octolab/config.git
+[submodule "src/toolkit/protocol"]
+	name = go.octolab.org/toolkit/protocol
+	path = src/toolkit/protocol
+	url = git@github.com:octolab/protocol.git
 [submodule "src/toolset/airseat"]
 	name = go.octolab.org/toolset/airseat
 	path = src/toolset/airseat
@@ -56,6 +86,10 @@
 	name = go.octolab.org/toolset/breakit
 	path = src/toolset/breakit
 	url = git@github.com:octolab/breakit.git
+[submodule "src/toolset/dotapps"]
+	name = go.octolab.org/toolset/dotapps
+	path = src/toolset/dotapps
+	url = git@github.com:octomation/dotapps.git
 [submodule "src/toolset/fiddle"]
 	name = go.octolab.org/toolset/fiddle
 	path = src/toolset/fiddle
@@ -84,6 +118,10 @@
 	name = go.octolab.org/toolset/secret
 	path = src/toolset/secret
 	url = git@github.com:octomation/secret.git
+[submodule "src/toolset/tablo"]
+	name = go.octolab.org/toolset/tablo
+	path = src/toolset/tablo
+	url = git@github.com:octomation/tablo.git
 [submodule "src/toolset/testit"]
 	name = go.octolab.org/toolset/testit
 	path = src/toolset/testit
@@ -93,48 +131,6 @@
 	path = src/toolset/try
 	url = git@github.com:octolab/try.git
 [submodule "src/toolset/tuna"]
-    name = go.octolab.org/toolset/tuna
+	name = go.octolab.org/toolset/tuna
 	path = src/toolset/tuna
 	url = git@github.com:octomation/tuna.git
-
-[submodule "src/tact/inbox/github"]
-	name = go.octolab.org/tact/inbox/github
-	path = src/tact/inbox/github
-	url = git@github.com:tact-app/github.git
-[submodule "src/tact/inbox/trello"]
-	name = go.octolab.org/tact/inbox/trello
-	path = src/tact/inbox/trello
-	url = git@github.com:tact-app/trello.git
-
-[submodule "src/pkg"]
-	name = go.octolab.org
-	path = src/pkg
-	url = git@github.com:octolab/pkg.git
-[submodule "src/toolkit/cli"]
-	name = go.octolab.org/toolkit/cli
-	path = src/toolkit/cli
-	url = git@github.com:octolab/cli.git
-[submodule "src/toolkit/config"]
-	name = go.octolab.org/toolkit/config
-	path = src/toolkit/config
-	url = git@github.com:octolab/config.git
-[submodule "src/propaganda"]
-	name = go.octolab.org/propaganda
-	path = src/propaganda
-	url = git@github.com:octolab/propaganda.git
-[submodule "src/toolkit/protocol"]
-	name = go.octolab.org/toolkit/protocol
-	path = src/toolkit/protocol
-	url = git@github.com:octolab/protocol.git
-[submodule "src/ecosystem/tablo"]
-	name = go.octolab.org/ecosystem/tablo
-	path = src/ecosystem/tablo
-	url = git@github.com:octopot/tablo.git
-[submodule "src/toolset/dotapps"]
-	name = go.octolab.org/toolset/dotapps
-	path = src/toolset/dotapps
-	url = git@github.com:octomation/dotapps.git
-[submodule "src/ecosystem/telemost"]
-	name = go.octolab.org/ecosystem/telemost
-	path = src/ecosystem/telemost
-	url = git@github.com:octopot/telemost.git

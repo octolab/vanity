@@ -4,38 +4,38 @@ toolchain go1.27.1
 
 // Local development selection. Publication uses every entry in .gitmodules.
 use (
-	//./src/toolset/airseat
 	//./src/ecosystem/beads
-	//./src/toolset/breakit
-	//./src/toolkit/cli
 	//./src/ecosystem/click
-	//./src/toolkit/config
-	//./src/toolset/fiddle
 	//./src/ecosystem/forma
+	//./src/ecosystem/guard
+	//./src/ecosystem/passport
+	//./src/ecosystem/sparkle
+	//./src/ecosystem/tablo
+	//./src/ecosystem/tact
+	//./src/ecosystem/telemost
+	//./src/pkg
+	//./src/propaganda
+	//./src/tact/inbox/github
+	//./src/tact/inbox/trello
+	//./src/template/inbox
 	//./src/template/module
 	//./src/template/service
 	//./src/template/tool
-	//./src/ecosystem/guard
-	//./src/template/inbox
-	//./src/tact/inbox/github
-	//./src/tact/inbox/trello
+	//./src/toolkit/cli
+	//./src/toolkit/config
+	//./src/toolkit/protocol
+	//./src/toolset/airseat
+	//./src/toolset/breakit
+	//./src/toolset/dotapps
+	//./src/toolset/fiddle
 	//./src/toolset/indexit
 	//./src/toolset/loop
 	//./src/toolset/maintainer
 	//./src/toolset/optflow
 	//./src/toolset/parallel
-	//./src/ecosystem/passport
-	//./src/pkg
-	//./src/propaganda
-	//./src/toolkit/protocol
 	//./src/toolset/secret
-	//./src/ecosystem/sparkle
 	//./src/toolset/tablo
-	//./src/ecosystem/tact
 	//./src/toolset/testit
 	//./src/toolset/try
 	./src/toolset/tuna
-	//./src/ecosystem/tablo
-	//./src/toolset/dotapps
-	//./src/ecosystem/telemost
 )
