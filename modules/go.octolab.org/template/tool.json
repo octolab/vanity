@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "name": "go-tool",
+  "module": "go.octolab.org/template/tool",
+  "repository": "https://github.com/octomation/go-tool",
+  "branch": "main",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/internal",
+    "/internal/command",
+    "/internal/command/demo",
+    "/internal/config"
+  ],
+  "topics": [
+    "cli",
+    "go",
+    "golang",
+    "hacktoberfest",
+    "octolab",
+    "quick-start",
+    "template",
+    "tool"
+  ],
+  "version": null,
+  "commit": "3bf8e20fef6da69943737cc38d484765aed6736c"
+}

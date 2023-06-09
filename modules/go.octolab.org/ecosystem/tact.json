@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "name": "tact",
+  "module": "go.octolab.org/ecosystem/tact",
+  "repository": "https://github.com/tact-app/service",
+  "branch": "main",
+  "visibility": "private",
+  "scope": "all",
+  "packages": [
+    "",
+    "/cmd/client",
+    "/cmd/server",
+    "/internal/command",
+    "/internal/config",
+    "/internal/generated"
+  ],
+  "topics": [
+    "backend",
+    "octolab",
+    "tact"
+  ],
+  "version": null,
+  "commit": "964ea83b4eb00bdb7f73315ab15e91afa3992103"
+}

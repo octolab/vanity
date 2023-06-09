@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "name": "tuna",
+  "module": "go.octolab.org/toolset/tuna",
+  "repository": "https://github.com/octomation/tuna",
+  "branch": "main",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/internal",
+    "/internal/assistant",
+    "/internal/command",
+    "/internal/config",
+    "/internal/exec",
+    "/internal/llm",
+    "/internal/plan",
+    "/internal/response",
+    "/internal/tui",
+    "/internal/tui/exec",
+    "/internal/tui/view",
+    "/internal/view"
+  ],
+  "topics": [
+    "go",
+    "prompt-engineering",
+    "prompt-tuning",
+    "tool",
+    "vibe-coded"
+  ],
+  "version": null,
+  "commit": "e373f238cabaadb3ea3f73f57451974b49dae698"
+}

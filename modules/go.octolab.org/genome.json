@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "name": "genome",
+  "module": "go.octolab.org/genome",
+  "repository": "https://github.com/octolab/genome",
+  "branch": "master",
+  "visibility": "private",
+  "scope": "all",
+  "packages": [
+    "",
+    "/internal",
+    "/internal/blocks/protein",
+    "/internal/blocks/protein/tree",
+    "/internal/cmd",
+    "/internal/cnf",
+    "/internal/slice"
+  ],
+  "topics": [
+    "avito",
+    "cli",
+    "code-generator",
+    "go",
+    "golang",
+    "tool"
+  ],
+  "version": null,
+  "commit": "c367df94a87907ebf3819ef536df29f124b5e5aa"
+}

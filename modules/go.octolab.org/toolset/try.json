@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "name": "try",
+  "module": "go.octolab.org/toolset/try",
+  "repository": "https://github.com/octolab/try",
+  "branch": "master",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/generate",
+    "/internal/cmd"
+  ],
+  "topics": [
+    "cli",
+    "execution",
+    "go",
+    "octolab",
+    "repeat",
+    "retry",
+    "tool",
+    "toolset"
+  ],
+  "version": null,
+  "commit": "3fec7029221697fed75d838f1e95bcd46836eab6"
+}

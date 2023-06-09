@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "name": "beads",
+  "module": "go.octolab.org/ecosystem/beads",
+  "repository": "https://github.com/octopot/beads",
+  "branch": "main",
+  "visibility": "private",
+  "scope": "all",
+  "packages": [
+    "",
+    "/cmd/client",
+    "/cmd/server",
+    "/internal/command",
+    "/internal/config",
+    "/internal/generated"
+  ],
+  "topics": [
+    "octolab"
+  ],
+  "version": null,
+  "commit": "ca8a22a50fb685f5b242e6bb12f21e02fee53fca"
+}

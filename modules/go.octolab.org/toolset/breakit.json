@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "name": "breakit",
+  "module": "go.octolab.org/toolset/breakit",
+  "repository": "https://github.com/octolab/breakit",
+  "branch": "master",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/internal",
+    "/internal/cmd",
+    "/internal/cnf"
+  ],
+  "topics": [],
+  "version": null,
+  "commit": "264b0552f9bcf9a52dc3497c189f35d81ca2d39f"
+}

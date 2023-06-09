@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "name": "ecosystem/tablo",
+  "module": "go.octolab.org/ecosystem/tablo",
+  "repository": "https://github.com/octopot/tablo",
+  "branch": "master",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/cmd/client",
+    "/cmd/server",
+    "/internal/cmd",
+    "/internal/config",
+    "/internal/generated",
+    "/internal/generated/api/v1",
+    "/internal/generated/api/v2",
+    "/internal/model",
+    "/internal/server/v1",
+    "/internal/service/github",
+    "/internal/service/trello",
+    "/internal/storage",
+    "/test/api",
+    "/test/e2e"
+  ],
+  "topics": [
+    "github",
+    "go",
+    "golang",
+    "kanban",
+    "octolab",
+    "service",
+    "trello"
+  ],
+  "version": null,
+  "commit": "7a43293c14daa5748ec2a89f6b8e8227745b9f8b"
+}

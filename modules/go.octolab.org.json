@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "name": "pkg",
+  "module": "go.octolab.org",
+  "repository": "https://github.com/octolab/pkg",
+  "branch": "main",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/async",
+    "/encoding",
+    "/env",
+    "/errors",
+    "/exp",
+    "/exp/http",
+    "/fn",
+    "/fn/timer",
+    "/io",
+    "/pointer",
+    "/runtime",
+    "/safe",
+    "/sequence",
+    "/sequence/generator",
+    "/sort",
+    "/strings",
+    "/strings/bytes",
+    "/strings/numd",
+    "/sync",
+    "/testing",
+    "/time",
+    "/unsafe"
+  ],
+  "topics": [
+    "go",
+    "hacktoberfest",
+    "octolab",
+    "toolkit"
+  ],
+  "version": null,
+  "commit": "48e3b73f67d1e6d3f87b8e8862e03cb6e91c4d2a"
+}

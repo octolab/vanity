@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "name": "click",
+  "module": "go.octolab.org/ecosystem/click",
+  "repository": "https://github.com/octopot/click",
+  "branch": "main",
+  "visibility": "private",
+  "scope": "all",
+  "packages": [
+    "",
+    "/cmd/client",
+    "/cmd/server",
+    "/internal/command",
+    "/internal/config",
+    "/internal/generated"
+  ],
+  "topics": [
+    "octolab"
+  ],
+  "version": null,
+  "commit": "d1f26a5b628ba9e4947f5a841015d33a9f086834"
+}

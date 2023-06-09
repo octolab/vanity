@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "name": "trello",
+  "module": "go.octolab.org/tact/inbox/trello",
+  "repository": "https://github.com/tact-app/trello",
+  "branch": "main",
+  "visibility": "private",
+  "scope": "all",
+  "packages": [
+    "",
+    "/cmd/client",
+    "/cmd/server",
+    "/internal/command",
+    "/internal/config",
+    "/internal/generated"
+  ],
+  "topics": [
+    "octolab",
+    "tact"
+  ],
+  "version": null,
+  "commit": "1323138c55d3e7da0b9bd05d8af1ffad4274fbc3"
+}

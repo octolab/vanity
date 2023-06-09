@@ -2,18 +2,17 @@ name: Workflow runs cleanup
 
 on:
   schedule:
-    - cron: 0 6 1 * * # at 06:00 on day-of-month 1, UTC
+    - cron: 0 6 2 * * # at 06:00 on day-of-month 2, UTC, a day after the monthly delivery
 
   workflow_dispatch:
     inputs:
       pattern:
-        description: The name of workflow to clean.
+        description: Delete completed runs of this workflow, or All workflows.
         type: choice
         options:
           - All
           - Continuous delivery
-          - Workflow caches cleanup
-          - Workflow caches warmup
+          - Continuous integration
           - Workflow runs cleanup
         default: Workflow runs cleanup
         required: true
@@ -27,10 +26,19 @@ on:
         default: manual healthcheck
         required: true
 
+concurrency:
+  group: cleanup-runs
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
 jobs:
   delete:
     name: Deleting
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: write
 
     steps:
       - name: Delete workflow runs
@@ -38,38 +46,42 @@ jobs:
         with:
           token: ${{ github.token }}
           repository: ${{ github.repository }}
-          delete_workflow_pattern: ${{ github.event.inputs.pattern || 'all' }}
-          dry_run: ${{ github.event.inputs.dry_run == 'true' && 'true' || '' }}
+          # empty, on the schedule or for All, means every workflow
+          delete_workflow_pattern: >-
+            ${{
+              inputs.pattern != 'All'
+              && inputs.pattern
+              || ''
+            }}
+          dry_run: ${{ inputs.dry_run && 'true' || 'false' }}
           retain_days: 0
           keep_minimum_runs: 0
-      - name: Cleanup workflow runs
-        run: |
-          gh run list \
-            -R '${{ github.repository }}' \
-            --status completed \
-            --limit 100 \
-            --json databaseId \
-            --jq '.[] | .databaseId' |
-            xargs -n1 --no-run-if-empty gh run delete -R '${{ github.repository }}'
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        if: github.event.inputs.pattern == 'All'
 
+  # inline, not a local action: this job holds the Slack webhook
   notify:
     name: Notifying
     needs: [ delete ]
-    runs-on: ubuntu-latest
-    if: failure() || success()
+    runs-on: ubuntu-24.04
+    if: ${{ !cancelled() }}
+    env:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v7.0.1
-        with: { fetch-depth: 0 }
-
-      - name: Send notification
-        uses: ./.github/actions/notify
+      - name: Define notification message
+        id: message
+        env:
+          DISPATCH_REASON: ${{ github.event.inputs.reason }}
+        run: |
+          message="${DISPATCH_REASON:-regular healthcheck}"
+          printf 'txt=%s\n' "${message%%$'\n'*}" >> "${GITHUB_OUTPUT}"
+      - name: Send Slack notification
+        if: ${{ env.SLACK_WEBHOOK != '' }}
         continue-on-error: true
-        with:
-          emoji: 🧹
-          channel: ${{ secrets.SLACK_WEBHOOK }}
-          success: ${{ ! contains(needs.*.result, 'failure') }}
+        uses: rtCamp/action-slack-notify@v2.4.1
+        env:
+          SLACK_COLOR: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
+          SLACK_FOOTER: made with ❤️ for everyone by <https://www.octolab.org/|OctoLab>
+          SLACK_ICON: https://cdn.octolab.org/geek/octolab.png
+          SLACK_MESSAGE: ${{ steps.message.outputs.txt }}
+          SLACK_TITLE: '🧹 ${{ github.repository }}: ${{ github.workflow }}'
+          SLACK_USERNAME: Notifier

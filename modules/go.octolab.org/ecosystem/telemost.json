@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "name": "telemost",
+  "module": "go.octolab.org/ecosystem/telemost",
+  "repository": "https://github.com/octopot/telemost",
+  "branch": "main",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/api/rpc/v1",
+    "/api/rpc/v1/v1connect",
+    "/cmd/client",
+    "/cmd/server",
+    "/internal/command",
+    "/internal/config",
+    "/internal/generated",
+    "/internal/server"
+  ],
+  "topics": [],
+  "version": null,
+  "commit": "0f3224ce7b5341d57353aea5a21d63f96ab32b78"
+}

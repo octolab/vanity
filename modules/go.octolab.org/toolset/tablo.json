@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "name": "pulse",
+  "module": "go.octolab.org/toolset/tablo",
+  "repository": "https://github.com/octomation/tablo",
+  "branch": "main",
+  "visibility": "private",
+  "scope": "all",
+  "packages": [
+    "",
+    "/cmd/client",
+    "/cmd/server",
+    "/internal/command",
+    "/internal/config",
+    "/internal/generated"
+  ],
+  "topics": [],
+  "version": null,
+  "commit": "8c21e5924b6c8d0e4315c04134cf7b341ab2e54c"
+}

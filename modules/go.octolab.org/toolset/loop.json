@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "name": "loop",
+  "module": "go.octolab.org/toolset/loop",
+  "repository": "https://github.com/octopot/loop",
+  "branch": "main",
+  "visibility": "private",
+  "scope": "all",
+  "packages": [
+    "",
+    "/internal",
+    "/internal/command",
+    "/internal/config",
+    "/internal/domain",
+    "/internal/pkg/assert",
+    "/internal/pkg/io",
+    "/internal/pkg/unsafe",
+    "/internal/service/loom",
+    "/internal/service/loom/dto"
+  ],
+  "topics": [
+    "octolab"
+  ],
+  "version": null,
+  "commit": "1c31911e108fde518108d44dfe33bdbb7b3e2589"
+}

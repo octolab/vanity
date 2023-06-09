@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "name": "sparkle",
+  "module": "go.octolab.org/ecosystem/sparkle",
+  "repository": "https://github.com/withsparkle/service",
+  "branch": "main",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/cmd/client",
+    "/cmd/server",
+    "/internal/api/service/v1",
+    "/internal/api/service/v1/servicev1connect",
+    "/internal/command",
+    "/internal/command/sparkle",
+    "/internal/config",
+    "/internal/generated",
+    "/internal/pkg/markdown",
+    "/internal/pkg/x/assert",
+    "/internal/pkg/x/errors",
+    "/internal/pkg/x/fs",
+    "/internal/pkg/x/testing",
+    "/internal/pkg/x/time",
+    "/internal/plugins/obsidian/calendar",
+    "/internal/plugins/obsidian/daily-notes",
+    "/internal/plugins/obsidian/periodic-notes",
+    "/internal/service/playbook",
+    "/internal/service/search",
+    "/internal/service/search/schema",
+    "/internal/service/tact"
+  ],
+  "topics": [
+    "backend",
+    "hacktoberfest",
+    "octolab",
+    "sparkle"
+  ],
+  "version": null,
+  "commit": "c7b307a9152b848c1e740ecc08bd393ee6821294"
+}

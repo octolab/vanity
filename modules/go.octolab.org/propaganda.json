@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "name": "propaganda",
+  "module": "go.octolab.org/propaganda",
+  "repository": "https://github.com/octolab/propaganda",
+  "branch": "main",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    ""
+  ],
+  "topics": [
+    "go",
+    "hacktoberfest",
+    "headers",
+    "http",
+    "middleware",
+    "module",
+    "octolab",
+    "round-trip"
+  ],
+  "version": null,
+  "commit": "09fcaf9a035972200244b8a767bc20587dc02154"
+}

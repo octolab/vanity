@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "name": "config",
+  "module": "go.octolab.org/toolkit/config",
+  "repository": "https://github.com/octolab/config",
+  "branch": "main",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/http"
+  ],
+  "topics": [
+    "config",
+    "go",
+    "hacktoberfest",
+    "http",
+    "octolab",
+    "toolkit"
+  ],
+  "version": null,
+  "commit": "d8771f2543c7ba504bf8e9def5cccbb241c86574"
+}

@@ -1,4 +1,6 @@
 /dist/
 /.dist.*/
 
+# a local Go workspace, if any, is not part of the catalog
+/go.work
 go.work.sum

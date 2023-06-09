@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "name": "go-service",
+  "module": "go.octolab.org/template/service",
+  "repository": "https://github.com/octomation/go-service",
+  "branch": "main",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/api/rpc/v1",
+    "/api/rpc/v1/v1connect",
+    "/cmd/client",
+    "/cmd/server",
+    "/internal/command",
+    "/internal/config",
+    "/internal/generated",
+    "/internal/server"
+  ],
+  "topics": [
+    "go",
+    "golang",
+    "hacktoberfest",
+    "octolab",
+    "quick-start",
+    "service",
+    "template"
+  ],
+  "version": null,
+  "commit": "b6dcd5347af2b408eedda8967a49b4efb93c7856"
+}

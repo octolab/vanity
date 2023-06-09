@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "name": "optflow",
+  "module": "go.octolab.org/toolset/optflow",
+  "repository": "https://github.com/octomation/optflow",
+  "branch": "main",
+  "visibility": "private",
+  "scope": "all",
+  "packages": [
+    "",
+    "/internal",
+    "/internal/command",
+    "/internal/command/webflow",
+    "/internal/config",
+    "/internal/domain",
+    "/internal/dto/webflow",
+    "/internal/ent/webflow",
+    "/internal/ent/webflow/author",
+    "/internal/ent/webflow/enttest",
+    "/internal/ent/webflow/hook",
+    "/internal/ent/webflow/migrate",
+    "/internal/ent/webflow/predicate",
+    "/internal/ent/webflow/runtime",
+    "/internal/ent/webflow/schema",
+    "/internal/ent/webflow/template",
+    "/internal/pkg/cli/cobra",
+    "/internal/pkg/database",
+    "/internal/service/notion",
+    "/internal/service/notion/layout",
+    "/internal/service/webflow"
+  ],
+  "topics": [
+    "manager",
+    "octolab",
+    "templates",
+    "webflow"
+  ],
+  "version": null,
+  "commit": "b9f0f4df65076fd5535c5bdbb36c8feda748356f"
+}

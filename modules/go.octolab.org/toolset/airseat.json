@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "name": "airseat",
+  "module": "go.octolab.org/toolset/airseat",
+  "repository": "https://github.com/octopot/airseat",
+  "branch": "main",
+  "visibility": "private",
+  "scope": "all",
+  "packages": [
+    "",
+    "/internal",
+    "/internal/command",
+    "/internal/command/demo",
+    "/internal/config"
+  ],
+  "topics": [
+    "octolab"
+  ],
+  "version": null,
+  "commit": "19e62ccdcc89f45f202dd8e53d4866e3e705d5d2"
+}

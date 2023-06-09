@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "name": "protocol",
+  "module": "go.octolab.org/toolkit/protocol",
+  "repository": "https://github.com/octolab/protocol",
+  "branch": "main",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/http",
+    "/http/header",
+    "/http/middleware",
+    "/http/middleware/chi",
+    "/http/router",
+    "/http/router/rest",
+    "/http/server"
+  ],
+  "topics": [
+    "go",
+    "grpc",
+    "hacktoberfest",
+    "http",
+    "octolab",
+    "protocol",
+    "rest",
+    "rpc",
+    "toolkit"
+  ],
+  "version": null,
+  "commit": "6f4ee3dbfd3a664528b365c604f58e91136849e6"
+}

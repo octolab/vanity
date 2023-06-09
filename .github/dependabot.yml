@@ -1,8 +1,9 @@
 version: 2
 
 updates:
+  # / covers .github/workflows, not local actions
   - package-ecosystem: github-actions
-    directory: /
+    directories: [ '/', '/.github/actions/*' ]
     schedule:
       interval: daily
       time: '05:00'

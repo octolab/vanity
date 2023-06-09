@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "name": "cli",
+  "module": "go.octolab.org/toolkit/cli",
+  "repository": "https://github.com/octolab/cli",
+  "branch": "main",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/cobra",
+    "/debugger",
+    "/errors",
+    "/graceful"
+  ],
+  "topics": [
+    "cli",
+    "go",
+    "hacktoberfest",
+    "octolab",
+    "toolkit"
+  ],
+  "version": null,
+  "commit": "2cabe6149ca8f0df27f8fdcea321b5b878ccb903"
+}

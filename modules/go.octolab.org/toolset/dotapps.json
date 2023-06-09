@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "name": "dotapps",
+  "module": "go.octolab.org/toolset/dotapps",
+  "repository": "https://github.com/octomation/dotapps",
+  "branch": "main",
+  "visibility": "private",
+  "scope": "all",
+  "packages": [
+    "",
+    "/internal",
+    "/internal/command",
+    "/internal/command/demo",
+    "/internal/config"
+  ],
+  "topics": [],
+  "version": null,
+  "commit": "b3cdc67d4d8e3965f0308aa96f6e1582a2eedf06"
+}

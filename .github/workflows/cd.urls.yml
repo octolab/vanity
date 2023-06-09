@@ -1,15 +1,19 @@
 name: Continuous delivery
 
+# Publishers (projects with the OctoLab Releaser App key) push entries to main;
+# the maintainer pushes everything else. This workflow file is the trust
+# anchor: the App has no `workflows` permission, so a publisher cannot change
+# it. The gate below judges the candidate commit with code from this file and
+# from the last deployed revision only, never with the candidate's own files.
+
 on:
   push:
     branches: [ main ]
     paths:
+      - '.github/actions/**'
       - '.github/workflows/cd.urls.yml'
-      - 'bin/lib/**/*.bash'
-      - 'bin/verify.py'
-      - '.gitmodules'
-      - 'src/**/*'
-      - 'go.work'
+      - 'bin/**'
+      - 'modules/**'
       - 'Makefile'
       - 'Taskfile'
 
@@ -23,106 +27,408 @@ on:
         type: string
         default: manual healthcheck
         required: true
+      vouch:
+        description: >-
+          Maintainer only: vouch for every change since the last deployment,
+          when the gate cannot attribute a push (e.g. no deployment yet).
+        type: boolean
+        default: false
 
+# a newer run waits instead of cancelling a deploy in flight; GitHub keeps only
+# the newest pending run, which is safe because the gate covers everything
+# since the last successful deployment, not only its own push
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
   contents: read
 
+env:
+  # the only identity whose pushes may change files outside modules/
+  MAINTAINER_LOGIN: kamilsk
+  MAINTAINER_ID: '1165416'
+  PYTHON_VERSION: 3.15.2
+
 jobs:
+  gate:
+    name: Gating
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      deployments: read
+    outputs:
+      base: ${{ steps.attribute.outputs.base }}
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v7.1.0
+        with: { python-version: '${{ env.PYTHON_VERSION }}' }
+
+      # A1 on this push alone, from the event and independent of the activity
+      # API: a push not by the maintainer may change entries only
+      - name: Check the paths of this push
+        if: github.event_name == 'push'
+        env:
+          SENDER: ${{ github.event.sender.login }}
+          SENDER_ID: ${{ github.event.sender.id }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.event.after }}
+        run: |
+          set -euo pipefail
+          if [[ ${SENDER} == "${MAINTAINER_LOGIN}" && ${SENDER_ID} == "${MAINTAINER_ID}" ]]; then
+            echo "Pushed by the maintainer."
+            exit 0
+          fi
+          if ! git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
+            echo "::error::Cannot read the range of this push by ${SENDER}."
+            exit 1
+          fi
+          outside=$(git diff --name-only --no-renames "${BEFORE}" "${AFTER}" |
+            grep -Ev '^modules/[A-Za-z0-9._/-]+\.json$' || true)
+          if [[ -n ${outside} ]]; then
+            echo "::error::This push by ${SENDER} changed paths outside modules/<module path>.json."
+            printf '%q\n' "${outside}"
+            exit 1
+          fi
+
+      # B = the commit of the last successful github-pages deployment; every
+      # path changed in B..HEAD is attributed to the last push that changed it
+      - name: Attribute the changes since the last deployment
+        id: attribute
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          ACTOR: ${{ github.actor }}
+          ACTOR_ID: ${{ github.actor_id }}
+          TRIGGERING_ACTOR: ${{ github.triggering_actor }}
+          VOUCH: ${{ github.event_name == 'workflow_dispatch' && inputs.vouch || false }}
+        run: |
+          set -euo pipefail
+          work="${RUNNER_TEMP}/gate"
+          mkdir -p "${work}"
+          : > "${work}/untrusted"
+          : > "${work}/transitions"
+
+          if [[ ${VOUCH} == true ]]; then
+            if [[ ${EVENT_NAME} != workflow_dispatch || ${ACTOR} != "${MAINTAINER_LOGIN}" ||
+                  ${ACTOR_ID} != "${MAINTAINER_ID}" || ${TRIGGERING_ACTOR} != "${MAINTAINER_LOGIN}" ]]; then
+              echo '::error::Only the maintainer may vouch for the changes since the last deployment.'
+              exit 1
+            fi
+            echo '::notice::The maintainer vouched for every change up to this commit.'
+            echo 'base=' >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          # every page of deployments, newest first; an API failure fails here
+          gh api --paginate "repos/${REPOSITORY}/deployments?environment=github-pages&per_page=100" \
+            --jq '.[] | "\(.id) \(.sha)"' > "${RUNNER_TEMP}/deployments"
+          base=
+          while read -r id sha; do
+            state=$(gh api "repos/${REPOSITORY}/deployments/${id}/statuses?per_page=1" --jq '.[0].state // ""')
+            if [[ ${state} == success ]]; then base=${sha}; break; fi
+          done < "${RUNNER_TEMP}/deployments"
+          if [[ -z ${base} ]] || ! git merge-base --is-ancestor "${base}" "${HEAD_SHA}"; then
+            echo "::error::No successful github-pages deployment is an ancestor of ${HEAD_SHA} (found '${base}'). The maintainer dispatches this workflow with vouch."
+            exit 1
+          fi
+          echo "base=${base}" >> "${GITHUB_OUTPUT}"
+          echo "Last deployed: ${base}"
+
+          # pushes to main with their GitHub-authenticated actor; the push of
+          # HEAD may take a moment to appear
+          for attempt in 1 2 3 4 5 6; do
+            gh api --paginate "repos/${REPOSITORY}/activity?ref=refs/heads/main&per_page=100" \
+              --jq '.[] | [.activity_type, .before, .after, (.actor.login // ""), ((.actor.id // 0) | tostring), .timestamp] | @tsv' \
+              > "${work}/activity"
+            if awk -F '\t' -v head="${HEAD_SHA}" '$3 == head { found = 1 } END { exit !found }' "${work}/activity"; then
+              break
+            fi
+            [[ ${attempt} == 6 ]] || sleep 10
+          done
+
+          python3 -I - "${base}" "${HEAD_SHA}" "${work}" <<'PY'
+          import os, subprocess, sys
+
+          base, head, work = sys.argv[1:]
+          maintainer = (os.environ["MAINTAINER_LOGIN"], os.environ["MAINTAINER_ID"])
+          zero = "0" * 40
+
+          def git(*args):
+              return subprocess.run(["git", *args], capture_output=True, check=True).stdout
+
+          def names(raw):
+              return [p.decode("utf-8", "surrogateescape") for p in raw.split(b"\0") if p]
+
+          # main must be linear: a merge could hide a commit from the pushes
+          if git("rev-list", "--merges", f"{base}..{head}").strip():
+              print(f"::error::{base[:7]}..{head[:7]} holds merge commits; main must be linear. "
+                    "The maintainer dispatches this workflow with vouch.")
+              sys.exit(1)
+          commits = git("rev-list", "--reverse", f"{base}..{head}").decode().split()
+          index = {c: i for i, c in enumerate(commits)}
+
+          # every commit belongs to the push that brought it; a commit no
+          # push accounts for is a publisher's
+          pusher = {}
+          for line in open(f"{work}/activity", encoding="utf-8"):
+              kind, before, after, login, uid, stamp = line.rstrip("\n").split("\t")
+              if after not in index:
+                  continue
+              if before == zero or subprocess.run(["git", "cat-file", "-e", before + "^{commit}"]).returncode:
+                  print(f"{after[:7]}: no usable 'before' ({kind}); its commits stay unattributed")
+                  continue
+              brought = git("rev-list", f"{before}..{after}").decode().split()
+              print(f"{stamp} {kind} {before[:7]}..{after[:7]} by {login} ({uid}): {len(brought)} commits")
+              for c in brought:
+                  if c in index:
+                      pusher.setdefault(c, set()).add((login, uid))
+
+          writer, touched = {}, []
+          for c in commits:
+              who = pusher.get(c, set())
+              trusted = who == {maintainer}
+              if not trusted:
+                  print(f"{c[:7]}: not the maintainer's ({', '.join(sorted(l for l, _ in who)) or 'no push found'})")
+              for path in names(git("diff-tree", "--no-commit-id", "--name-only", "--no-renames", "-r", "-z", c)):
+                  writer[path] = trusted
+                  touched.append((c, path))
+
+          bad = False
+          final = [p for p in names(git("diff", "--name-only", "--no-renames", "-z", base, head))
+                   if not writer.get(p, False)]
+          changes = [(c, p) for c, p in touched if not writer[p] and pusher.get(c, set()) != {maintainer}]
+          with open(f"{work}/untrusted", "w", encoding="utf-8") as paths, \
+               open(f"{work}/transitions", "w", encoding="utf-8") as transitions:
+              for p in sorted(set(final) | {p for _, p in changes}):
+                  if not p.isprintable() or not p.isascii():
+                      print(f"::error::A publisher push added a path with unusual characters: {p!r}")
+                      bad = True
+                      continue
+                  paths.write(p + "\n")
+                  print(f"publisher-written: {p}")
+              for c, p in changes:
+                  if p.isprintable() and p.isascii():
+                      transitions.write(f"{c}\t{p}\n")
+          print(f"{len(commits)} commits since {base[:7]}, {len(final)} publisher-written paths")
+          sys.exit(1 if bad else 0)
+          PY
+
+      # A1: in this file, not in a candidate script
+      - name: Check that publishers changed entries only
+        env:
+          UNTRUSTED: ${{ runner.temp }}/gate/untrusted
+        run: |
+          set -euo pipefail
+          status=0
+          grep -Ev '^modules/[A-Za-z0-9._/-]+\.json$' "${UNTRUSTED}" > "${RUNNER_TEMP}/gate/outside" || status=$?
+          case ${status} in
+            1) echo "$(wc -l < "${UNTRUSTED}") publisher-written entries" ;;
+            0)
+              while IFS= read -r path; do
+                printf '::error::A push not by the maintainer changed %q; only modules/<module path>.json is open to publishers.\n' "${path}"
+              done < "${RUNNER_TEMP}/gate/outside"
+              exit 1
+              ;;
+            *) echo '::error::Cannot read the list of publisher-written paths.'; exit 1 ;;
+          esac
+
+      # the validator of the last deployed revision judges the publishers
+      - name: Check publisher-written entries with the deployed validator
+        env:
+          BASE: ${{ steps.attribute.outputs.base }}
+          WORK: ${{ runner.temp }}/gate
+        run: |
+          set -euo pipefail
+          [[ -s ${WORK}/untrusted ]] || { echo 'No publisher-written entries.'; exit 0; }
+          mkdir -p "${RUNNER_TEMP}/trusted"
+          if ! git cat-file blob "${BASE}:bin/catalog.py" > "${RUNNER_TEMP}/trusted/catalog.py"; then
+            echo "::error::${BASE} has no bin/catalog.py to judge publisher-written entries; the maintainer dispatches with vouch."
+            exit 1
+          fi
+          python3 -I "${RUNNER_TEMP}/trusted/catalog.py" --root "${GITHUB_WORKSPACE}" check \
+            --untrusted-from "${WORK}/untrusted" --transitions-from "${WORK}/transitions"
+
+      # bin/ is the maintainer's now (the step above passed), so it may run
+      - name: Check the whole catalog
+        run: python3 -I bin/catalog.py --root . check
+      # releases displace the seeds (version null) dumped from the submodules
+      - name: Report the self-publishing progress
+        run: python3 -I bin/catalog.py --root . progress --summary "${GITHUB_STEP_SUMMARY}"
+
+      # A3: a catalog tag counts only on a commit of main
+      - name: Check the catalog tags
+        env:
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          git for-each-ref --format='%(refname:strip=2)' 'refs/tags/' |
+            grep -E -- '--v[0-9]+\.[0-9]+\.[0-9]+$' |
+            while IFS= read -r tag; do
+              if ! git merge-base --is-ancestor "refs/tags/${tag}^{commit}" "${HEAD_SHA}"; then
+                printf '::warning::Catalog tag %q is not on main; it is not honoured.\n' "${tag}"
+              fi
+            done
+
   build:
     name: Building
-    runs-on: ubuntu-latest
+    needs: [ gate ]
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       pages: read
 
     steps:
-      - name: Check submodule credentials
-        env:
-          SUBMODULE_TOKEN: ${{ secrets.DEPENDABOT_TOKEN }}
-        run: |
-          if [ -z "$SUBMODULE_TOKEN" ]; then
-            echo '::error::DEPENDABOT_TOKEN must have read access to the private repositories in .gitmodules.'
-            exit 1
-          fi
       - name: Checkout the repository
         uses: actions/checkout@v7.0.1
         with:
-          fetch-depth: 0
-          submodules: true
-          token: ${{ secrets.DEPENDABOT_TOKEN }}
+          ref: ${{ github.sha }}
           persist-credentials: false
-      - name: Install dependencies
-        env:
-          MAINTAINER_VERSION: 0.1.0-rc11
-        run: |
-          release="https://github.com/octomation/maintainer/releases/download/v${MAINTAINER_VERSION}"
-          archive="maintainer_${MAINTAINER_VERSION}_linux-amd64.tar.gz"
-          mkdir -p "$RUNNER_TEMP/maintainer"
-          cd "$RUNNER_TEMP/maintainer"
-          curl --fail --show-error --location --retry 3 "$release/$archive" -o "$archive"
-          curl --fail --show-error --location --retry 3 "$release/checksums.txt" -o checksums.txt
-          sha256sum --check --ignore-missing checksums.txt
-          tar -xzf "$archive" maintainer
-          echo "$RUNNER_TEMP/maintainer" >> "$GITHUB_PATH"
+      - name: Set up the build tools
+        uses: ./.github/actions/setup
       - name: Set up GitHub Pages
-        uses: actions/configure-pages@v6.0.0
         id: pages
+        uses: actions/configure-pages@v6.0.0
       - name: Check the custom domain
         env:
           PAGES_HOST: ${{ steps.pages.outputs.host }}
         run: |
-          if [ "$PAGES_HOST" != go.octolab.org ]; then
+          if [ "${PAGES_HOST}" != go.octolab.org ]; then
             echo '::error::Set go.octolab.org as the custom domain in Settings > Pages before deploying.'
             exit 1
           fi
-      - name: Set up Go environment
-        uses: actions/setup-go@v7.0.0
-        with: { go-version-file: go.work, cache: false }
 
       - name: Build static HTML
         run: make
-        env:
-          GITHUB_TOKEN: ${{ secrets.DEPENDABOT_TOKEN }}
-      - name: Upload the documentation
+      - name: Upload the site
         uses: actions/upload-pages-artifact@v5.0.0
         with: { path: dist }
 
   deploy:
     name: Deploying
     needs: [ build ]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     permissions:
       contents: read
+      deployments: read
       id-token: write
       pages: write
 
     steps:
+      # a re-run of an old run's deploy job skips the gate: never go back
+      - name: Check that the live site is not newer
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          ACTOR: ${{ github.actor }}
+          ACTOR_ID: ${{ github.actor_id }}
+          TRIGGERING_ACTOR: ${{ github.triggering_actor }}
+          VOUCH: ${{ github.event_name == 'workflow_dispatch' && inputs.vouch || false }}
+        run: |
+          set -euo pipefail
+          # every page of deployments, newest first; an API failure fails here
+          gh api --paginate "repos/${REPOSITORY}/deployments?environment=github-pages&per_page=100" \
+            --jq '.[] | "\(.id) \(.sha)"' > "${RUNNER_TEMP}/deployments"
+          base=
+          while read -r id sha; do
+            state=$(gh api "repos/${REPOSITORY}/deployments/${id}/statuses?per_page=1" --jq '.[0].state // ""')
+            if [[ ${state} == success ]]; then base=${sha}; break; fi
+          done < "${RUNNER_TEMP}/deployments"
+          if [[ -z ${base} ]]; then
+            # the first deployment: only on the maintainer's vouch, checked again
+            # on every attempt (a re-run may be triggered by someone else)
+            if [[ ${VOUCH} == true && ${EVENT_NAME} == workflow_dispatch && ${ACTOR} == "${MAINTAINER_LOGIN}" &&
+                  ${ACTOR_ID} == "${MAINTAINER_ID}" && ${TRIGGERING_ACTOR} == "${MAINTAINER_LOGIN}" ]]; then
+              echo '::notice::No deployment yet; the maintainer vouched for the first one.'
+              exit 0
+            fi
+            echo '::error::No successful github-pages deployment found; the maintainer dispatches with vouch for the first one.'
+            exit 1
+          fi
+          status=$(gh api "repos/${REPOSITORY}/compare/${base}...${HEAD_SHA}" --jq .status)
+          case ${status} in
+            identical | ahead) echo "${HEAD_SHA} is ${status} of the live ${base}" ;;
+            *)
+              echo "::error::${HEAD_SHA} is ${status} of the live ${base}: refusing to roll the site back."
+              exit 1
+              ;;
+          esac
       - name: Deploy it to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5.0.1
 
-  notify:
-    name: Notifying
-    needs: [ build, deploy ]
-    runs-on: ubuntu-latest
-    if: failure() || success()
+  # Pages answers from a CDN with a 10-minute cache: retry, do not ignore
+  live:
+    name: Verifying the live site
+    needs: [ gate, deploy ]
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v7.0.1
-        with: { fetch-depth: 0 }
-
-      - name: Send notification
-        uses: ./.github/actions/notify
-        continue-on-error: true
         with:
-          emoji: 🤴
-          channel: ${{ secrets.SLACK_WEBHOOK }}
-          success: ${{ ! contains(needs.*.result, 'failure') }}
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v7.1.0
+        with: { python-version: '${{ env.PYTHON_VERSION }}' }
+      # this build's manifest, a page for every package, and a 404 for every
+      # page of the previous deployment this one dropped
+      - name: Verify every published package
+        env:
+          BASE: ${{ needs.gate.outputs.base }}
+        run: |
+          python3 bin/verify.py --url https://go.octolab.org --packages \
+            ${BASE:+--previous "${BASE}"} --attempts 24 --delay 30
+
+  # inline, not a local action: main may hold a publisher's change that the
+  # gate rejected, and this job holds the Slack webhook
+  notify:
+    name: Notifying
+    needs: [ gate, build, deploy, live ]
+    runs-on: ubuntu-24.04
+    if: ${{ !cancelled() }}
+    env:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+    steps:
+      - name: Define notification message
+        id: message
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          DISPATCH_REASON: ${{ github.event.inputs.reason }}
+        run: |
+          if [[ -n "${COMMIT_MESSAGE}" ]]; then
+            message="${COMMIT_MESSAGE}"
+          elif [[ -n "${DISPATCH_REASON}" ]]; then
+            message="${DISPATCH_REASON}"
+          else
+            message='regular healthcheck'
+          fi
+          printf 'txt=%s\n' "${message%%$'\n'*}" >> "${GITHUB_OUTPUT}"
+      - name: Send Slack notification
+        if: ${{ env.SLACK_WEBHOOK != '' }}
+        continue-on-error: true
+        uses: rtCamp/action-slack-notify@v2.4.1
+        env:
+          SLACK_COLOR: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
+          SLACK_FOOTER: made with ❤️ for everyone by <https://www.octolab.org/|OctoLab>
+          SLACK_ICON: https://cdn.octolab.org/geek/octolab.png
+          SLACK_MESSAGE: ${{ steps.message.outputs.txt }}
+          SLACK_TITLE: '🤴 ${{ github.repository }}: ${{ github.workflow }}'
+          SLACK_USERNAME: Notifier

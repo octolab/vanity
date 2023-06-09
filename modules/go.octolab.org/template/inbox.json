@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "name": "inbox",
+  "module": "go.octolab.org/template/inbox",
+  "repository": "https://github.com/tact-app/inbox",
+  "branch": "main",
+  "visibility": "private",
+  "scope": "all",
+  "packages": [
+    "",
+    "/cmd/client",
+    "/cmd/server",
+    "/internal/command",
+    "/internal/config",
+    "/internal/generated"
+  ],
+  "topics": [
+    "octolab",
+    "tact"
+  ],
+  "version": null,
+  "commit": "37bc50abc5446bb1150051b1a2aff06d7c69f734"
+}

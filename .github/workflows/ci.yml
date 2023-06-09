@@ -1,0 +1,53 @@
+name: Continuous integration
+
+# Pull requests run the candidate's own code: read-only token, no secrets.
+on:
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: The reason for dispatching it manually.
+        type: string
+        default: manual healthcheck
+        required: true
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Linting
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v7.0.1
+        with: { persist-credentials: false }
+      - name: Run actionlint
+        uses: docker://rhysd/actionlint:1.7.12
+        with:
+          args: -color
+
+  build:
+    name: Checking and building
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v7.0.1
+        with: { persist-credentials: false }
+      - name: Set up the build tools
+        uses: ./.github/actions/setup
+
+      - name: Run the tests
+        run: make test
+      - name: Check the catalog
+        run: make validate
+      - name: Build static HTML
+        run: make

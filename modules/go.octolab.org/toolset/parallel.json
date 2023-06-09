@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "name": "parallel",
+  "module": "go.octolab.org/toolset/parallel",
+  "repository": "https://github.com/octolab/parallel",
+  "branch": "master",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/internal/cmd"
+  ],
+  "topics": [
+    "cli",
+    "execution",
+    "go",
+    "octolab",
+    "parallel",
+    "tool",
+    "toolset"
+  ],
+  "version": null,
+  "commit": "1711b5bc8f2538a92d6e14b1fa64c2ba6d4b8bef"
+}

@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "name": "fiddle",
+  "module": "go.octolab.org/toolset/fiddle",
+  "repository": "https://github.com/octopot/fiddle",
+  "branch": "main",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/internal",
+    "/internal/command",
+    "/internal/command/demo",
+    "/internal/config"
+  ],
+  "topics": [
+    "octolab",
+    "sparkle"
+  ],
+  "version": null,
+  "commit": "4d75096313e11b9e74ec3b00cae76ffa563634ff"
+}
