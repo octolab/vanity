@@ -41,7 +41,7 @@ jobs:
       - name: Install dependencies
         run: curl -sSfL https://install.octolab.org/maintainer | sh -s -- -b /usr/local/bin -dx
       - name: Set up GitHub Pages
-        uses: actions/configure-pages@v4.0.0
+        uses: actions/configure-pages@v5.0.0
       - name: Set up Go environment
         uses: actions/setup-go@v5.0.0
         with: { go-version: 1.21.x, cache-dependency-path: src/*/go.sum, check-latest: true }
