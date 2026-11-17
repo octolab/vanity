@@ -3,7 +3,7 @@ code: null
 id: I_kwDODBR9IM5jnof2
 databaseId: 1671333878
 number: 11
-url: https://github.com/octomation/vanity/issues/11
+url: https://github.com/octolab/vanity/issues/11
 title: "dev: define multi-module workspace"
 issueType: null
 labels:
@@ -29,6 +29,6 @@ closedAt: 2023-04-17T15:20:28Z
 
 **Motivation:** work with all modules in a unified fashion.
 
-<!-- 2023-04-17T15:20Z https://github.com/octomation/vanity/issues/11#issuecomment-1511579808
+<!-- 2023-04-17T15:20Z https://github.com/octolab/vanity/issues/11#issuecomment-1511579808
 fixed [6650baa](https://github.com/octomation/vanity/commit/6650baa64ddf46ab9fac0dc32ed38fb786a5c1a0)
 -->

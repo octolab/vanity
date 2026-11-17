@@ -3,7 +3,7 @@ code: null
 id: MDU6SXNzdWU3NzY2MDI1NzE=
 databaseId: 776602571
 number: 6
-url: https://github.com/octomation/vanity/issues/6
+url: https://github.com/octolab/vanity/issues/6
 title: "move go code to the maintainer project"
 issueType: null
 labels: []

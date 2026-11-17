@@ -3,24 +3,24 @@ code: null
 id: I_kwDODBR9IM8AAAABeoNLcQ
 databaseId: 6350392177
 number: 504
-url: https://github.com/octomation/vanity/issues/504
+url: https://github.com/octolab/vanity/issues/504
 title: "ci/cd: verify the live site after each deploy"
 issueType: Task
 labels:
-  - "scope: inventory"
   - "type: improvement"
+  - "scope: inventory"
 assignees:
   - kamilsk
 milestone: null
 parent: null
 issueFields: {}
-state: OPEN
-stateReason: null
+state: CLOSED
+stateReason: COMPLETED
 duplicateOf: null
 createdAt: 2026-11-12T13:03:30Z
-updatedAt: 2026-11-12T13:04:04Z
-lastEditedAt: 2026-11-12T13:04:04Z
-closedAt: null
+updatedAt: 2026-11-17T17:46:33Z
+lastEditedAt: 2026-11-17T17:45:38Z
+closedAt: 2026-11-17T17:46:33Z
 ---
 
 # ci/cd: verify the live site after each deploy
@@ -50,12 +50,20 @@ sed -n '/Check submodule credentials/,/fi/p' .github/workflows/cd.urls.yml
 
 ## Acceptance criteria
 
-- [ ] A deploy whose pages differ from `.gitmodules` fails the run.
-- [ ] A run with an expired or revoked secret fails at the credentials step
-      with a clear message, before checkout.
-- [ ] A normal deploy passes within the retry budget.
+- [x] A deploy whose pages differ from `.gitmodules` fails the run.
+- [x] ~~A run with an expired or revoked secret fails at the credentials step
+      with a clear message, before checkout.~~ Obsolete: CD reads no other repository and holds no such secret.
+- [x] A normal deploy passes within the retry budget.
 
 ## Out of scope
 
 - Replacing the secret: [[issue-500]].
 - Scheduled checks between deploys: [[issue-503]].
+
+<!-- 2026-11-17T18:40Z https://github.com/octolab/vanity/issues/504#issuecomment-6956078386
+Done with the self-publishing rollout (#500).
+
+- The job "Verifying the live site" of `cd.urls.yml` runs `bin/verify.py --url https://go.octolab.org` against the entries of the deployed commit; the entries replaced `.gitmodules`.
+- A normal deploy passes within the retries: run 44110991840 on 8959eac is green; a 503 on one package passed on the second attempt.
+- The credentials criterion is obsolete: vanity no longer checks out module code, and its workflows reference no secret but `SLACK_WEBHOOK`. `DEPENDABOT_TOKEN` was deleted from octomation on 2026-11-17.
+-->

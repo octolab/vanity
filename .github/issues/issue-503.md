@@ -3,12 +3,12 @@ code: null
 id: I_kwDODBR9IM8AAAABeoNG6Q
 databaseId: 6350391017
 number: 503
-url: https://github.com/octomation/vanity/issues/503
+url: https://github.com/octolab/vanity/issues/503
 title: "ci/cd: assess vanity promises every month"
 issueType: Task
 labels:
-  - "scope: inventory"
   - "type: improvement"
+  - "scope: inventory"
 assignees:
   - kamilsk
 milestone: null
@@ -18,7 +18,7 @@ state: OPEN
 stateReason: null
 duplicateOf: null
 createdAt: 2026-11-12T13:03:26Z
-updatedAt: 2026-11-12T13:03:26Z
+updatedAt: 2026-11-12T16:25:07Z
 lastEditedAt: null
 closedAt: null
 ---

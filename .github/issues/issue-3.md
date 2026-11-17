@@ -3,7 +3,7 @@ code: null
 id: MDU6SXNzdWU0ODE5NzIzMDA=
 databaseId: 481972300
 number: 3
-url: https://github.com/octomation/vanity/issues/3
+url: https://github.com/octolab/vanity/issues/3
 title: "research go vanity url"
 issueType: null
 labels: []
@@ -31,10 +31,10 @@ closedAt: 2021-01-02T09:01:54Z
   - [x] https://golang.org/s/go14customimport
 - [ ] https://github.com/GoogleCloudPlatform/govanityurls
 
-<!-- 2019-08-19T09:29Z https://github.com/octomation/vanity/issues/3#issuecomment-522489801
+<!-- 2019-08-19T09:29Z https://github.com/octolab/vanity/issues/3#issuecomment-522489801
 full research https://github.com/under-the-hood/vanity-url
 -->
 
-<!-- 2021-01-02T09:01Z https://github.com/octomation/vanity/issues/3#issuecomment-753449664
+<!-- 2021-01-02T09:01Z https://github.com/octolab/vanity/issues/3#issuecomment-753449664
 will be done while preparing to [workshop](https://github.com/kamilsk/workshops)
 -->

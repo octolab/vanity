@@ -3,7 +3,7 @@ code: null
 id: MDU6SXNzdWU0ODE5NzIxMTA=
 databaseId: 481972110
 number: 2
-url: https://github.com/octomation/vanity/issues/2
+url: https://github.com/octolab/vanity/issues/2
 title: "solve problems with godoc"
 issueType: null
 labels: []
@@ -27,6 +27,6 @@ closedAt: 2019-08-22T17:48:26Z
 - [x] problems with `go.octolab.org/tookit/*`, e.g. https://godoc.org/go.octolab.org/toolkit/cli
 - [x] problems with `pkg`, e.g. https://godoc.org/go.octolab.org/os/shell
 
-<!-- 2019-08-22T17:48Z https://github.com/octomation/vanity/issues/2#issuecomment-524008535
+<!-- 2019-08-22T17:48Z https://github.com/octolab/vanity/issues/2#issuecomment-524008535
 fixed
 -->

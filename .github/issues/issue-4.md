@@ -3,7 +3,7 @@ code: null
 id: MDU6SXNzdWU0ODE5NzMzODA=
 databaseId: 481973380
 number: 4
-url: https://github.com/octomation/vanity/issues/4
+url: https://github.com/octolab/vanity/issues/4
 title: "use .git for https"
 issueType: null
 labels: []
@@ -25,6 +25,6 @@ closedAt: 2019-08-18T12:43:48Z
 
 e.g. https://github.com/octolab/cli.git
 
-<!-- 2019-08-18T12:43Z https://github.com/octomation/vanity/issues/4#issuecomment-522318967
+<!-- 2019-08-18T12:43Z https://github.com/octolab/vanity/issues/4#issuecomment-522318967
 done
 -->

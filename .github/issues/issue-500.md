@@ -3,13 +3,13 @@ code: null
 id: I_kwDODBR9IM8AAAABeXEDaw
 databaseId: 6332416875
 number: 500
-url: https://github.com/octomation/vanity/issues/500
+url: https://github.com/octolab/vanity/issues/500
 title: "build: let projects publish their modules to octolab/vanity"
 issueType: Task
 labels:
+  - "type: improvement"
   - "scope: code"
   - "scope: inventory"
-  - "type: improvement"
 assignees:
   - kamilsk
 milestone: null
@@ -19,8 +19,8 @@ state: OPEN
 stateReason: null
 duplicateOf: null
 createdAt: 2026-11-11T16:11:11Z
-updatedAt: 2026-11-11T16:11:30Z
-lastEditedAt: null
+updatedAt: 2026-11-17T17:50:07Z
+lastEditedAt: 2026-11-17T17:45:34Z
 closedAt: null
 ---
 
@@ -82,7 +82,7 @@ grep -c '^\[submodule' .gitmodules                          # 31, pinned by hand
 
 ## Acceptance criteria
 
-- [ ] octolab/vanity serves go.octolab.org; `python3 bin/verify.py --url
+- [x] octolab/vanity serves go.octolab.org; `python3 bin/verify.py --url
       https://go.octolab.org` passes for every module that is published today,
       and `bin/lib/core/check.bash` passes.
 - [ ] A release of indexit (or maintainer) updates its entry in
@@ -90,13 +90,15 @@ grep -c '^\[submodule' .gitmodules                          # 31, pinned by hand
       manual step; the site shows it after the vanity build.
 - [ ] A new Go project gets onto go.octolab.org by adding the action call to
       its `cd.yml` only.
-- [ ] vanity workflows reference no secret with access to other repositories;
+- [x] vanity workflows reference no secret with access to other repositories;
       `.gitmodules` is gone.
-- [ ] In maintainer and indexit `cd.yml` the goreleaser/tap part and the
+- [x] ~~In maintainer and indexit `cd.yml` the goreleaser/tap part and the
       skill part are calls of their own actions; a release of each still
-      publishes the tap formula and the skill.
-- [ ] [[issue-499]] is closed with a reference to this task.
-- [ ] README of vanity describes how a project publishes itself.
+      publishes the tap formula and the skill.~~ The skill and vanity jobs are
+      separate; the tap part moved to [[issue-509]].
+- [x] ~~[[issue-499]] is closed with a reference to this task.~~ [[issue-499]]
+      is decided on its own; this task does not wait for it.
+- [x] README of vanity describes how a project publishes itself.
 
 ## Out of scope
 
@@ -104,7 +106,7 @@ grep -c '^\[submodule' .gitmodules                          # 31, pinned by hand
 - Moving other repositories between organizations.
 - Changing the import paths of any module.
 
-<!-- 2026-11-11T19:30Z https://github.com/octomation/vanity/issues/500#issuecomment-6800920004
+<!-- 2026-11-11T16:11Z https://github.com/octolab/vanity/issues/500#issuecomment-6800920004
 ## Algorithm
 
 A suggested order: each step leaves go.octolab.org working, so the work can stop between steps.
@@ -153,4 +155,15 @@ A suggested order: each step leaves go.octolab.org working, so the work can stop
 - Pages downtime during the transfer: verify the domain for octolab first, and check `dig go.octolab.org` and `curl -sI https://go.octolab.org` right after.
 - Every tool's workflow with the Releaser key can rewrite any entry. The action should write only `modules/<its module>.json`; vanity CI can check that each commit touches one entry whose `repository` matches the commit's tag prefix.
 - tact-app has no Releaser secrets, so its modules either get the secrets or stay seeded by hand.
+-->
+
+<!-- 2026-11-17T18:40Z https://github.com/octolab/vanity/issues/500#issuecomment-6956077327
+State after the self-publishing rollout (2026-11-12 … 2026-11-17).
+
+- Done: octolab/vanity serves go.octolab.org from entries; `bin/verify-live.sh --packages` passes (385 packages), `make check` passes; `.gitmodules` and `src/` are gone, and the workflows reference no secret but `SLACK_WEBHOOK`; the README describes how a project publishes itself.
+- 35 modules carry the vanity job: the 31 submodules counted when this task was written and 4 added during the migration (genome, ecosystem/telemost, toolset/dotapps, ecosystem/tablo). 4 published themselves already (go-module v1.0.0, pkg v0.12.2, cli v0.6.4, config v0.0.5), each with an App-signed catalog tag on main.
+- Moved out: the tap part of the maintainer and indexit workflows, to #509 (their skill and vanity jobs are separate already); the notify of the module repositories, to #508. #499 is decided on its own.
+- Open: a release of indexit or maintainer that publishes itself and creates `indexit--v<version>` (no release is planned yet, this does not block the rest); a brand-new module whose entry the action creates (the 4 publications updated seeded entries).
+
+The task stays open until both are seen.
 -->

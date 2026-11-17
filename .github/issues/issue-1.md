@@ -3,7 +3,7 @@ code: null
 id: MDU6SXNzdWU0ODE5NzE5NTI=
 databaseId: 481971952
 number: 1
-url: https://github.com/octomation/vanity/issues/1
+url: https://github.com/octolab/vanity/issues/1
 title: "automate build based on yaml"
 issueType: null
 labels: []

@@ -3,12 +3,12 @@ code: null
 id: I_kwDODBR9IM8AAAABeR_aRg
 databaseId: 6327097926
 number: 499
-url: https://github.com/octomation/vanity/issues/499
+url: https://github.com/octolab/vanity/issues/499
 title: "security: reconsider how private modules are published"
 issueType: Task
 labels:
-  - "scope: inventory"
   - "type: improvement"
+  - "scope: inventory"
 assignees:
   - kamilsk
 milestone: null
@@ -18,7 +18,7 @@ state: OPEN
 stateReason: null
 duplicateOf: null
 createdAt: 2026-11-11T11:06:13Z
-updatedAt: 2026-11-11T11:06:13Z
+updatedAt: 2026-11-17T17:44:06Z
 lastEditedAt: null
 closedAt: null
 ---
@@ -66,3 +66,13 @@ GitHub for them, and the Dependabot configuration for private submodules.
 - Moving private modules out of vanity or to another domain.
 - Rewriting the history of this repository to remove `.gitmodules` entries.
 - The expired `DEPENDABOT_TOKEN` that blocks delivery now.
+
+<!-- 2026-11-17T18:40Z https://github.com/octolab/vanity/issues/499#issuecomment-6956076329
+State after the self-publishing rollout (#500).
+
+- vanity no longer reads private repositories: each module writes its own entry from its release workflow, so what a private module discloses is now decided by its entry, not by vanity.
+- The rollout keeps the old behaviour on purpose: every entry, the 11 private modules included, publishes `packages: all`, as the submodules did. The README of vanity says so and points here.
+- The action already supports the narrower choice: `packages: auto` publishes only the root of a private module, enough for `go get` in module mode by someone with access.
+
+What is left is the policy itself: root only (`auto`) or everything (`all`) for private modules, written in the README; then `make verify` follows it and the 11 private modules switch their `packages` input where needed.
+-->

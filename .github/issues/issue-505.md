@@ -3,24 +3,24 @@ code: null
 id: I_kwDODBR9IM8AAAABeoNPjw
 databaseId: 6350393231
 number: 505
-url: https://github.com/octomation/vanity/issues/505
+url: https://github.com/octolab/vanity/issues/505
 title: "build: verify go-source and redirects, not only go-import"
 issueType: Task
 labels:
-  - "scope: code"
   - "type: improvement"
+  - "scope: code"
 assignees:
   - kamilsk
 milestone: null
 parent: null
 issueFields: {}
-state: OPEN
-stateReason: null
+state: CLOSED
+stateReason: COMPLETED
 duplicateOf: null
 createdAt: 2026-11-12T13:03:34Z
-updatedAt: 2026-11-12T13:03:34Z
-lastEditedAt: null
-closedAt: null
+updatedAt: 2026-11-17T17:46:37Z
+lastEditedAt: 2026-11-17T17:45:41Z
+closedAt: 2026-11-17T17:46:36Z
 ---
 
 # build: verify go-source and redirects, not only go-import
@@ -53,10 +53,19 @@ curl -s 'https://go.octolab.org/toolkit/cli?go-get=1' | grep -E 'go-source|refre
 
 ## Acceptance criteria
 
-- [ ] A page with a wrong branch in `go-source` fails `make verify`.
-- [ ] A page with a wrong redirect fails `make verify`.
-- [ ] The comment in `check.bash` matches what is checked.
+- [x] A page with a wrong branch in `go-source` fails `make verify`.
+- [x] A page with a wrong redirect fails `make verify`.
+- [x] The comment in `check.bash` matches what is checked.
 
 ## Out of scope
 
 - What private modules publish: [[issue-499]].
+
+<!-- 2026-11-17T18:40Z https://github.com/octolab/vanity/issues/505#issuecomment-6956079420
+Done with the self-publishing rollout (#500).
+
+- `bin/verify.py` checks `go-import`, `go-source` and the redirect of every module root and package page, locally and with `--url`; an unknown path must answer 404.
+- `test_wrong_branch` and `test_wrong_redirect` in `bin/tests/test_catalog.py` fail on a wrong branch and a wrong redirect; the suite is green.
+- `bin/lib/core/check.bash` names the same three checks.
+- `bin/verify-live.sh --packages` on 2026-11-17: 385 packages verified over HTTPS.
+-->

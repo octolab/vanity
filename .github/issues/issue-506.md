@@ -3,24 +3,24 @@ code: null
 id: I_kwDODBR9IM8AAAABeoNTmg
 databaseId: 6350394266
 number: 506
-url: https://github.com/octomation/vanity/issues/506
+url: https://github.com/octolab/vanity/issues/506
 title: "ci/cd: least privilege and no expression injection in workflows"
 issueType: Task
 labels:
-  - "scope: inventory"
   - "type: improvement"
+  - "scope: inventory"
 assignees:
   - kamilsk
 milestone: null
 parent: null
 issueFields: {}
-state: OPEN
-stateReason: null
+state: CLOSED
+stateReason: COMPLETED
 duplicateOf: null
 createdAt: 2026-11-12T13:03:38Z
-updatedAt: 2026-11-12T13:03:38Z
-lastEditedAt: null
-closedAt: null
+updatedAt: 2026-11-17T17:46:40Z
+lastEditedAt: 2026-11-17T17:45:44Z
+closedAt: 2026-11-17T17:46:40Z
 ---
 
 # ci/cd: least privilege and no expression injection in workflows
@@ -52,13 +52,23 @@ grep -n 'uses:' .github/workflows/*.yml | grep -vE '@v[0-9]+\.[0-9]+\.[0-9]+|\./
 
 ## Acceptance criteria
 
-- [ ] `grep -L '^permissions:' .github/workflows/*.yml` prints nothing.
-- [ ] A commit message with `$(…)` or quotes is shown verbatim in Slack and
+- [x] `grep -L '^permissions:' .github/workflows/*.yml` prints nothing.
+- [x] A commit message with `$(…)` or quotes is shown verbatim in Slack and
       not executed.
-- [ ] No external `uses:` without a patch tag.
+- [x] No external `uses:` without a patch tag.
 
 ## Out of scope
 
 - Pinning by commit SHA: patch tags are the agreed compromise.
 - The maintainer binary checksum: under [[issue-500]] the publisher does not
   use maintainer.
+
+<!-- 2026-11-17T18:40Z https://github.com/octolab/vanity/issues/506#issuecomment-6956080510
+Done for vanity.
+
+- `cd.urls.yml`, `ci.yml` and `cleanup.runs.yml` declare `permissions:`.
+- The local `notify` action is gone; the commit message and the dispatch reason reach shell only through `env:` (`COMMIT_MESSAGE`, `DISPATCH_REASON`).
+- Every external `uses:` has a patch tag; Dependabot keeps them current.
+
+The `notify` of the 17 module repositories that publish themselves is not in this task's criteria: it moved to #508.
+-->

@@ -3,24 +3,24 @@ code: null
 id: I_kwDODBR9IM8AAAABeoNZ1g
 databaseId: 6350395862
 number: 507
-url: https://github.com/octomation/vanity/issues/507
+url: https://github.com/octolab/vanity/issues/507
 title: "docs: publish the contract for modules on go.octolab.org"
 issueType: Task
 labels:
-  - "scope: docs"
   - "type: improvement"
+  - "scope: docs"
 assignees:
   - kamilsk
 milestone: null
 parent: null
 issueFields: {}
-state: OPEN
-stateReason: null
+state: CLOSED
+stateReason: COMPLETED
 duplicateOf: null
 createdAt: 2026-11-12T13:03:43Z
-updatedAt: 2026-11-12T13:04:07Z
-lastEditedAt: 2026-11-12T13:04:07Z
-closedAt: null
+updatedAt: 2026-11-17T17:46:42Z
+lastEditedAt: 2026-11-17T17:45:47Z
+closedAt: 2026-11-17T17:46:42Z
 ---
 
 # docs: publish the contract for modules on go.octolab.org
@@ -61,11 +61,24 @@ gh api repos/octolab/cli/git/tags/$sha --jq .verification.verified   # true
 
 ## Acceptance criteria
 
-- [ ] The contract is in the README.
-- [ ] Every eligible repository of the catalog has the tag ruleset.
-- [ ] A list of repositories that cannot have it, with the reason.
+- [x] The contract is in the README.
+- [x] Every eligible repository of the catalog has the tag ruleset.
+- [x] A list of repositories that cannot have it, with the reason.
 
 ## Out of scope
 
 - Restoring the deleted tags of octolab/config: a decision of its own.
 - Re-signing old tags.
+
+<!-- 2026-11-17T18:40Z https://github.com/octolab/vanity/issues/507#issuecomment-6956081494
+Checked on 2026-11-17 against the 35 modules of the catalog.
+
+- The contract is in the README of vanity ("The contract", "Release tags") and of octomation/vanity-action.
+- 26 of 35 repositories have the tag ruleset "Release tags": active, deletion and update restricted on `refs/tags/v*`. They are the 22 public repositories (with octopot/indexit and octomation/maintainer) and the 4 private repositories of octopot (Team plan): airseat, beads, click, loop.
+- 9 repositories cannot have it: private repositories of organizations on the Free plan, where the rulesets API answers 403 "Upgrade to GitHub Pro or make this repository public":
+  - octolab/genome
+  - octomation/dotapps, octomation/optflow, octomation/secret, octomation/tablo
+  - tact-app/github, tact-app/inbox, tact-app/service, tact-app/trello
+
+  In them the rule stays an agreement.
+-->

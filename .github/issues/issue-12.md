@@ -3,7 +3,7 @@ code: null
 id: I_kwDODBR9IM5jnpeg
 databaseId: 1671337888
 number: 12
-url: https://github.com/octomation/vanity/issues/12
+url: https://github.com/octolab/vanity/issues/12
 title: "dev: integrate go-tool"
 issueType: null
 labels:
@@ -29,6 +29,6 @@ closedAt: 2023-04-17T15:11:27Z
 
 **Motivation:** prepare for #8.
 
-<!-- 2023-04-17T15:11Z https://github.com/octomation/vanity/issues/12#issuecomment-1511560238
+<!-- 2023-04-17T15:11Z https://github.com/octolab/vanity/issues/12#issuecomment-1511560238
 fixed [d2e3cd5](https://github.com/octomation/vanity/commit/d2e3cd590bfb09ef095537710d1b1b67023c6cff)
 -->
