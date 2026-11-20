@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "name": "pulse",
+  "module": "go.octolab.org/toolset/pulse",
+  "repository": "https://github.com/octomation/pulse",
+  "branch": "main",
+  "visibility": "public",
+  "scope": "all",
+  "packages": [
+    "",
+    "/cmd/pulse",
+    "/cmd/pulsectl",
+    "/internal/command",
+    "/internal/config",
+    "/internal/details",
+    "/internal/source",
+    "/internal/source/github",
+    "/internal/source/internal/fixture",
+    "/internal/source/internal/page",
+    "/internal/source/trendshift",
+    "/internal/store",
+    "/internal/trend",
+    "/internal/vault",
+    "/internal/watch",
+    "/internal/watch/watchtest",
+    "/internal/web"
+  ],
+  "topics": [
+    "activities",
+    "cli",
+    "github",
+    "go",
+    "news",
+    "octolab",
+    "tool",
+    "toolset"
+  ],
+  "version": "v0.1.0",
+  "commit": "a4f02aa9c4ec2be0ccfb3819dd3bbdbfbd9e841d"
+}
