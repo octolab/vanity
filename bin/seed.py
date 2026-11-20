@@ -45,13 +45,11 @@ GO_ENV = {
 # Catalog tag names (<name>--vX.Y.Z), as the integrations pass them to the
 # action. The default is the repository name (octolab/pkg is pkg); these
 # modules get an explicit one because their repository name collides with
-# another module's (service, tablo) or the project is renamed (octomation/tablo
-# becomes pulse; its module path stays).
+# another module's (service, tablo).
 NAMES = {
     "go.octolab.org/ecosystem/sparkle": "sparkle",
     "go.octolab.org/ecosystem/tablo": "ecosystem/tablo",
     "go.octolab.org/ecosystem/tact": "tact",
-    "go.octolab.org/toolset/tablo": "pulse",
 }
 
 

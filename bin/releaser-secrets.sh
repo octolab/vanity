@@ -14,7 +14,7 @@
 #   octomation, octopot   organization secrets, visibility all
 #   octolab               organization secret, visibility selected: its public publishers
 #   repository secrets    octolab/genome, withsparkle/service, tact-app/{service,inbox,github,trello},
-#                         octomation/{dotapps,optflow,secret,tablo}
+#                         octomation/{dotapps,optflow,secret,pulse}
 # The key goes to gh through stdin only: never printed, never on a command
 # line. The dry run proves the key belongs to the App: it signs a short-lived
 # JWT locally and calls GET /app (read-only). Rotation: generate a new key in
@@ -29,7 +29,7 @@ APP_SLUG=octolab-releaser
 ORGS_ALL=(octomation octopot)
 ORG_REPOS=(pkg propaganda cli config protocol breakit parallel testit try)
 REPO_TARGETS=(octolab/genome withsparkle/service tact-app/service tact-app/inbox tact-app/github tact-app/trello
-  octomation/dotapps octomation/optflow octomation/secret octomation/tablo)
+  octomation/dotapps octomation/optflow octomation/secret octomation/pulse)
 NAMES=(OCTOLAB_RELEASER_CLIENT_ID OCTOLAB_RELEASER_KEY)
 
 say() { printf '%s\n' "$*"; }

@@ -85,8 +85,8 @@ The snippet below is the action's own:
   octolab/pkg) and must be unique in the catalog: kebab-case segments joined
   by `/` (`^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)*$`, at most 64
   characters). Set it explicitly when the repository name is taken or does
-  not fit: `ecosystem/tablo` (octopot/tablo), `pulse` (octomation/tablo, to be
-  renamed), `sparkle` and `tact` (both repositories are named `service`).
+  not fit: `ecosystem/tablo` (octopot/tablo), `sparkle` and `tact` (both
+  repositories are named `service`).
 - `packages` decides what go.octolab.org publishes: `root` the module root
   only, `all` every package directory, `auto` (default) `root` for a private or
   internal repository and `all` for a public one. Every integration of this
