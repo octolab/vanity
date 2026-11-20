@@ -199,10 +199,10 @@ packages or topics of an entry.
 
 ## 🔗 Dependencies
 
-- [Maintainer](https://maintainer.octolab.org/)
-  [v0.1.0-rc11](https://github.com/octomation/maintainer/releases/tag/v0.1.0-rc11)
-  renders the pages; the workflows download it and check its release checksum.
-- Python 3.9+ (the workflows use 3.15.2), Bash 4+, Git.
+- Python 3.9+ and Git: `bin/catalog.py` and `bin/verify.py` use the standard
+  library only, and the workflows run the `python3` of the runner image.
+- Bash 4+ and Go only for the local tasks of `./Taskfile`: `make check`, the
+  smoke test of the live site.
 - Only for the one-off seed: Go and the GitHub CLI with read access to the
   private repositories.
 

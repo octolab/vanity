@@ -415,5 +415,63 @@ class Verify(unittest.TestCase):
                 verify.local(d, self.modules)
 
 
+class Build(unittest.TestCase):
+    """bin/catalog.py build: the pages and modules.yml of the site."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.out = Path(self.tmp.name)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def html(self, package):
+        return (self.out / package.removeprefix("go.octolab.org").lstrip("/") / "index.html").read_text()
+
+    def test_page_bytes(self):
+        catalog.render([TOOL_ENTRY], self.out)
+        self.assertEqual(self.html("go.octolab.org/toolset/indexit/internal"), """<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="go-import" content="go.octolab.org/toolset/indexit git https://github.com/octopot/indexit">
+        <meta name="go-source" content="go.octolab.org/toolset/indexit https://github.com/octopot/indexit \
+https://github.com/octopot/indexit/tree/main{/dir} https://github.com/octopot/indexit/blob/main{/dir}/{file}#L{line}">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="refresh" content="0; url=https://pkg.go.dev/go.octolab.org/toolset/indexit/internal">
+        <title>go.octolab.org/toolset/indexit/internal</title>
+    </head>
+    <body>
+        Nothing to see here. Please <a href="https://pkg.go.dev/go.octolab.org/toolset/indexit/internal">move along</a>.
+    </body>
+</html>
+""")
+
+    def test_directory_pages_and_a_root_without_go_files(self):
+        tool = {**TOOL_ENTRY, "packages": ["/cmd/indexit"]}
+        modules = {e["module"]: e for e in (ROOT_ENTRY, tool)}
+        count = catalog.render(list(modules.values()), self.out)
+        built = sorted(p.parent.relative_to(self.out).as_posix() for p in self.out.rglob("index.html"))
+        self.assertEqual(built, [".", "errors", "sync", "toolset/indexit",
+                                 "toolset/indexit/cmd", "toolset/indexit/cmd/indexit"])
+        self.assertEqual(count, len(built))
+        self.assertIn("url=https://pkg.go.dev/go.octolab.org/toolset/indexit/cmd\"", self.html(
+            "go.octolab.org/toolset/indexit/cmd"))
+        self.assertEqual((self.out / "modules.yml").read_text(), catalog.manifest(list(modules.values())))
+        verify.local(self.out, modules)
+
+    def test_cli_build(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for e in (ROOT_ENTRY, TOOL_ENTRY):
+                catalog.write_entry(root, e)
+            result = subprocess.run(
+                ["python3", "-I", str(Path(catalog.__file__)), "--root", str(root), "build", str(self.out / "site")],
+                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout, "Rendered 7 pages of 2 modules\nVerified 2 module roots, 6 packages and 7 pages\n")
+        self.assertTrue((self.out / "site/toolset/indexit/cmd/indexit/index.html").is_file())
+        self.assertEqual([p.name for p in self.out.iterdir()], ["site"])
+
+
 if __name__ == "__main__":
     unittest.main()

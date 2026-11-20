@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
-"""The catalog of go.octolab.org: entries under modules/, their rules, the manifest.
+"""The catalog of go.octolab.org: entries under modules/, their rules, the site.
 
 Commands:
   check     validate every entry and the catalog invariants, offline;
             with --untrusted / --transitions-from, also the rules for what a
             publisher wrote (see README, "Security model").
-  manifest  print the Maintainer manifest (modules.yml) built from the entries.
+  manifest  print the manifest (modules.yml) built from the entries; the site
+            publishes it next to the pages.
+  build     render the site: an import page per package and per directory up
+            to its module root, and modules.yml; check it with bin/verify.py
+            and only then replace DIR.
   progress  how many modules publish themselves and which still sit on seeds
             (version null, dumped from the submodules); --summary FILE appends
             it as Markdown, e.g. to $GITHUB_STEP_SUMMARY.
@@ -15,11 +19,14 @@ deployed revision, so keep it self-contained and keep --root explicit there.
 """
 
 import argparse
+import html
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 HOST = "go.octolab.org"
@@ -227,7 +234,7 @@ def load(root):
 
 
 def rendered(e):
-    """Pages Maintainer renders for an entry: its packages and their parents inside the module."""
+    """Pages of an entry: its packages and their parents inside the module."""
     pages = set()
     for p in e["packages"]:
         while True:
@@ -335,7 +342,7 @@ def check(root, paths=(), transitions=()):
 
 
 def manifest(entries):
-    """modules.yml for `maintainer go vanity build`, block by block."""
+    """modules.yml, the catalog as the site publishes it, block by block."""
     out = []
     for e in entries:
         url, branch, module = e["repository"], e["branch"], e["module"]
@@ -352,6 +359,65 @@ def manifest(entries):
             out.append(f"    - {module}{p}\n")
         out.append(f"  tags: [ {', '.join(e['topics'])} ]\n")
     return "".join(out)
+
+
+PAGE = """<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="go-import" content="{module} git {url}">
+        <meta name="go-source" content="{module} {url} {url}/tree/{branch}{{/dir}} {url}/blob/{branch}{{/dir}}/{{file}}#L{{line}}">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta http-equiv="refresh" content="0; url=https://pkg.go.dev/{package}">
+        <title>{package}</title>
+    </head>
+    <body>
+        Nothing to see here. Please <a href="https://pkg.go.dev/{package}">move along</a>.
+    </body>
+</html>
+"""
+
+
+def pages(entries):
+    """(package, html) for every page of the site, in the order they are written.
+
+    A page per published package and per directory between a package and the
+    root of its module, so that every prefix of an import path resolves. S5
+    keeps the pages of two entries apart.
+    """
+    for e in sorted(entries, key=lambda e: e["module"]):
+        values = {k: html.escape(e[k]) for k in ("module", "branch")}
+        values["url"] = html.escape(e["repository"])
+        for package in sorted(rendered(e)):
+            yield package, PAGE.format(package=html.escape(package), **values)
+
+
+def render(entries, directory):
+    """Write the pages of the site and modules.yml into an empty directory; the page count."""
+    count = 0
+    for package, page in pages(entries):
+        target = Path(directory, *package.removeprefix(HOST).split("/"), "index.html")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(page, encoding="utf-8")
+        count += 1
+    Path(directory, "modules.yml").write_text(manifest(entries), encoding="utf-8")
+    return count
+
+
+def build(entries, directory):
+    """Render the site next to directory, verify it, then put it in its place."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import verify  # the independent check of the pages; it imports this file
+
+    target = Path(directory).resolve()
+    target.parent.mkdir(parents=True, exist_ok=True)
+    work = Path(tempfile.mkdtemp(prefix=".dist.", dir=target.parent))
+    try:
+        print(f"Rendered {render(entries, work)} pages of {len(entries)} modules")
+        verify.local(work, {e["module"]: e for e in entries})
+        shutil.rmtree(target, ignore_errors=True)
+        work.rename(target)
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
 
 
 def progress(entries):
@@ -401,6 +467,8 @@ def main():
     c.add_argument("--transitions-from", type=Path, metavar="FILE",
                    help="read <commit> TAB <path> lines: what each publisher commit changed")
     sub.add_parser("manifest", help="print modules.yml built from the entries")
+    b = sub.add_parser("build", help="render and verify the site, then replace DIR with it")
+    b.add_argument("directory", type=Path, metavar="DIR")
     pr = sub.add_parser("progress", help="how many modules publish themselves, which are still seeds")
     pr.add_argument("--summary", type=Path, metavar="FILE",
                     help="also append it as Markdown to FILE, e.g. $GITHUB_STEP_SUMMARY")
@@ -418,13 +486,16 @@ def main():
                 f.write(progress_summary(entries))
         return
 
-    if args.command == "manifest":
+    if args.command in ("manifest", "build"):
         entries, errors = load(args.root)
         errors += invariants(entries)
         if errors:
             report(errors)
             raise SystemExit(1)
-        sys.stdout.write(manifest(entries))
+        if args.command == "build":
+            build(entries, args.directory)
+        else:
+            sys.stdout.write(manifest(entries))
         return
 
     paths = list(args.untrusted)

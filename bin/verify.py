@@ -4,7 +4,7 @@
 For every page: go-import names the module and its repository, go-source its
 repository and default branch, and the refresh and the link lead to the
 package on pkg.go.dev. Locally, every published package has a page and no page
-is outside the declared packages of its module (Maintainer also writes the
+is outside the declared packages of its module (the build also writes the
 parent directories of packages inside a module). With --url, the module roots
 (or, with --packages, every published package and the served modules.yml, which
 must equal the manifest of the entries) are fetched over verified HTTPS, and a
@@ -53,16 +53,14 @@ def owner(package, modules):
 def pages_of(modules):
     """Every page the catalog renders and the module it belongs to.
 
-    A published package belongs to the entry that declares it; Maintainer also
+    A published package belongs to the entry that declares it; the build also
     renders the parent directories of a package inside its module, which belong
     to that module unless another entry declares them.
     """
     pages = {e["module"] + p: m for m, e in modules.items() for p in e["packages"]}
-    for package, module in list(pages.items()):
-        parent = package
-        while parent != module:
-            parent = parent.rsplit("/", 1)[0]
-            pages.setdefault(parent, module)
+    for module, e in modules.items():
+        for page in catalog.rendered(e):
+            pages.setdefault(page, module)
     return pages
 
 

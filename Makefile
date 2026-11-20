@@ -1,23 +1,23 @@
 .DEFAULT_GOAL = compile
 
 compile:
-	@ ./Taskfile compile
+	@ python3 bin/catalog.py build dist
 .PHONY: compile
 
 list:
-	@ ./Taskfile modules
+	@ python3 bin/catalog.py manifest
 .PHONY: list
 
 validate:
-	@ ./Taskfile validate
+	@ python3 bin/catalog.py check
 .PHONY: validate
 
 verify:
-	@ ./Taskfile verify
+	@ python3 bin/verify.py dist
 .PHONY: verify
 
 test:
-	@ ./Taskfile tests
+	@ python3 -m unittest discover -s bin/tests
 .PHONY: test
 
 check:

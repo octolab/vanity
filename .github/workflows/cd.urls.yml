@@ -48,7 +48,8 @@ env:
   # the only identity whose pushes may change files outside modules/
   MAINTAINER_LOGIN: kamilsk
   MAINTAINER_ID: '1165416'
-  PYTHON_VERSION: 3.15.2
+  # bin/ needs only the standard library of Python 3.9+: every job runs the
+  # python3 of the runner image (3.12 on ubuntu-24.04), nothing is downloaded
 
 jobs:
   gate:
@@ -68,9 +69,6 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
           persist-credentials: false
-      - name: Set up Python
-        uses: actions/setup-python@v7.1.0
-        with: { python-version: '${{ env.PYTHON_VERSION }}' }
 
       # A1 on this push alone, from the event and independent of the activity
       # API: a push not by the maintainer may change entries only
@@ -293,8 +291,6 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-      - name: Set up the build tools
-        uses: ./.github/actions/setup
       - name: Set up GitHub Pages
         id: pages
         uses: actions/configure-pages@v6.0.0
@@ -384,9 +380,6 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
-      - name: Set up Python
-        uses: actions/setup-python@v7.1.0
-        with: { python-version: '${{ env.PYTHON_VERSION }}' }
       # this build's manifest, a page for every package, and a 404 for every
       # page of the previous deployment this one dropped
       - name: Verify every published package
