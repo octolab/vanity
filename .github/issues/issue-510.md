@@ -7,20 +7,20 @@ url: https://github.com/octolab/vanity/issues/510
 title: "build: render the import pages without maintainer"
 issueType: Task
 labels:
-  - "scope: code"
   - "type: improvement"
+  - "scope: code"
 assignees:
   - kamilsk
 milestone: null
 parent: null
 issueFields: {}
-state: OPEN
-stateReason: null
+state: CLOSED
+stateReason: COMPLETED
 duplicateOf: null
 createdAt: 2026-11-20T14:26:17Z
-updatedAt: 2026-11-20T14:26:17Z
-lastEditedAt: null
-closedAt: null
+updatedAt: 2026-11-21T06:11:18Z
+lastEditedAt: 2026-11-21T06:11:02Z
+closedAt: 2026-11-21T06:11:18Z
 ---
 
 # build: render the import pages without maintainer
@@ -54,19 +54,23 @@ grep -n maintainer bin/lib/core/compile.bash .github/actions/setup/action.yml
 - [x] `.github/actions/setup` installs no maintainer; `MAINTAINER_VERSION` and its checksum
       are gone.
 - [x] Tests in `bin/tests` cover the directory pages and a module whose root has no Go files.
-- [ ] A deploy of `cd.urls.yml` is green and `bin/verify-live.sh` passes.
+- [x] A deploy of `cd.urls.yml` is green and `bin/verify-live.sh` passes.
 
 ## Out of scope
 
 - Removing `go vanity` from maintainer: octomation/maintainer, after this task.
 - Changes to the page template or to the entry format.
 
-<!-- 2026-11-20T18:00Z
-Done in the working tree, waiting for the push and a green deploy.
+<!-- 2026-11-20T18:00Z https://github.com/octolab/vanity/issues/510#issuecomment-7058429880
+Done in aa13bc6.
 
 - `bin/catalog.py build DIR` renders the pages and `modules.yml` with the standard library, checks them with `bin/verify.py` and only then replaces `DIR`; `make` calls it directly. `bin/lib/core/compile.bash` and `modules.bash` are gone: CI runs no Bash script to build, `./Taskfile` keeps only the local smoke test and the seed.
 - `dist/` of the current catalog is byte-identical to the one built by maintainer (453 files, `diff -r` empty), with no `maintainer` on PATH, under Python 3.15, 3.13 and 3.9.
 - `.github/actions/setup` is gone with `setup-python`: the workflows use the `python3` of ubuntu-24.04, nothing is downloaded. `MAINTAINER_VERSION` and its checksum check are gone; README no longer lists maintainer.
 - `verify.py` walks the pages with `catalog.rendered`, the same function as the build and the S5 invariant.
 - `bin/tests` covers the page bytes, the directory pages of a module root without Go files and the `build` command (60 tests, OK).
+-->
+
+<!-- 2026-11-21T06:10Z https://github.com/octolab/vanity/issues/510#issuecomment-7058430341
+Live check passed. The deploys of aa13bc6 and of 9bf60f0 (maintainer v0.5.0, published by vanity-action) are green in every job, the live deployment is main 9bf60f0, and `bin/verify-live.sh --packages` passes: HTTPS discovery for 391 packages, catalog tag `maintainer--v0.5.0` identical to its entry. go.octolab.org builds and publishes without maintainer.
 -->
