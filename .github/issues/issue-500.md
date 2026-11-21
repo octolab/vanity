@@ -19,8 +19,8 @@ state: OPEN
 stateReason: null
 duplicateOf: null
 createdAt: 2026-11-11T16:11:11Z
-updatedAt: 2026-11-17T17:50:07Z
-lastEditedAt: 2026-11-17T17:45:34Z
+updatedAt: 2026-11-21T06:23:17Z
+lastEditedAt: 2026-11-21T06:23:14Z
 closedAt: null
 ---
 
@@ -85,7 +85,7 @@ grep -c '^\[submodule' .gitmodules                          # 31, pinned by hand
 - [x] octolab/vanity serves go.octolab.org; `python3 bin/verify.py --url
       https://go.octolab.org` passes for every module that is published today,
       and `bin/lib/core/check.bash` passes.
-- [ ] A release of indexit (or maintainer) updates its entry in
+- [x] A release of indexit (or maintainer) updates its entry in
       octolab/vanity and creates the tag `indexit--v<version>` without any
       manual step; the site shows it after the vanity build.
 - [ ] A new Go project gets onto go.octolab.org by adding the action call to
@@ -166,4 +166,8 @@ State after the self-publishing rollout (2026-11-12 … 2026-11-17).
 - Open: a release of indexit or maintainer that publishes itself and creates `indexit--v<version>` (no release is planned yet, this does not block the rest); a brand-new module whose entry the action creates (the 4 publications updated seeded entries).
 
 The task stays open until both are seen.
+-->
+
+<!-- 2026-11-21T06:22Z https://github.com/octolab/vanity/issues/500#issuecomment-7058565820
+The release criterion holds for maintainer v0.5.0. The tag in octomation/maintainer was the only manual step. vanity-action then committed 9bf60f0 "chore(maintainer): publish v0.5.0" as octolab-releaser[bot] and created the tag `maintainer--v0.5.0`. The vanity deploy is green, and `bin/verify-live.sh --packages` reports the tag identical to its entry. Open: a new project that gets onto go.octolab.org by the action call only.
 -->
