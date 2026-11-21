@@ -14,10 +14,7 @@
     "/internal/command/github/contribution",
     "/internal/command/github/management",
     "/internal/command/github/view",
-    "/internal/command/golang",
     "/internal/command/hub",
-    "/internal/command/makefile",
-    "/internal/command/proxy",
     "/internal/command/service",
     "/internal/command/status",
     "/internal/config",
@@ -25,8 +22,6 @@
     "/internal/model/git",
     "/internal/model/github/contribution",
     "/internal/model/gitlab",
-    "/internal/model/golang",
-    "/internal/model/golang/vanity",
     "/internal/pkg/assert",
     "/internal/pkg/assert/checks",
     "/internal/pkg/buildinfo",
@@ -62,6 +57,6 @@
     "tool",
     "toolset"
   ],
-  "version": null,
-  "commit": "69804aaad7f3e90bd2f73f504455fe191facd6c7"
+  "version": "v0.5.0",
+  "commit": "c72dd2c791eac6c02f2a12a2344d2a03d61fee39"
 }
