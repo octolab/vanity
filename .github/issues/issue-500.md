@@ -15,13 +15,13 @@ assignees:
 milestone: null
 parent: null
 issueFields: {}
-state: OPEN
-stateReason: null
+state: CLOSED
+stateReason: COMPLETED
 duplicateOf: null
 createdAt: 2026-11-11T16:11:11Z
-updatedAt: 2026-11-21T06:23:17Z
-lastEditedAt: 2026-11-21T06:23:14Z
-closedAt: null
+updatedAt: 2026-11-21T06:28:56Z
+lastEditedAt: 2026-11-21T06:28:43Z
+closedAt: 2026-11-21T06:28:56Z
 ---
 
 # build: let projects publish their modules to octolab/vanity
@@ -88,7 +88,7 @@ grep -c '^\[submodule' .gitmodules                          # 31, pinned by hand
 - [x] A release of indexit (or maintainer) updates its entry in
       octolab/vanity and creates the tag `indexit--v<version>` without any
       manual step; the site shows it after the vanity build.
-- [ ] A new Go project gets onto go.octolab.org by adding the action call to
+- [x] A new Go project gets onto go.octolab.org by adding the action call to
       its `cd.yml` only.
 - [x] vanity workflows reference no secret with access to other repositories;
       `.gitmodules` is gone.
@@ -170,4 +170,8 @@ The task stays open until both are seen.
 
 <!-- 2026-11-21T06:22Z https://github.com/octolab/vanity/issues/500#issuecomment-7058565820
 The release criterion holds for maintainer v0.5.0. The tag in octomation/maintainer was the only manual step. vanity-action then committed 9bf60f0 "chore(maintainer): publish v0.5.0" as octolab-releaser[bot] and created the tag `maintainer--v0.5.0`. The vanity deploy is green, and `bin/verify-live.sh --packages` reports the tag identical to its entry. Open: a new project that gets onto go.octolab.org by the action call only.
+-->
+
+<!-- 2026-11-21T06:28Z https://github.com/octolab/vanity/issues/500#issuecomment-7058633011
+Done. octomation/pulse got onto go.octolab.org by the action call only. Its first release added the entry in 2a032e8 "chore(pulse): publish v0.1.0" as octolab-releaser[bot], with the tag `pulse--v0.1.0`, and v0.1.1 followed the same way. Every criterion holds.
 -->
