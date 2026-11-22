@@ -32,14 +32,14 @@
     "/skills"
   ],
   "topics": [
-    "cl",
+    "cli",
     "go",
     "index",
     "octolab",
     "telegram",
     "tool",
-    "toolse"
+    "toolset"
   ],
-  "version": null,
-  "commit": "cbc7add36a6b87e57f0ee412626d91dd2d51d262"
+  "version": "v0.4.2",
+  "commit": "9630246284a552c964867982f4cc302594bd71aa"
 }
