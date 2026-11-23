@@ -13,6 +13,7 @@
     "/internal/command",
     "/internal/config",
     "/internal/details",
+    "/internal/hide",
     "/internal/source",
     "/internal/source/github",
     "/internal/source/internal/fixture",
@@ -35,6 +36,6 @@
     "tool",
     "toolset"
   ],
-  "version": "v0.1.1",
-  "commit": "07bbe415d5f413c6341116c3d8509807f8f2c4db"
+  "version": "v0.2.0",
+  "commit": "e9a3102441c945e6e9355bbb445e852df8cf24f5"
 }
