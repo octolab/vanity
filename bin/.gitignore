@@ -4,6 +4,8 @@
 !/catalog.py
 !/seed.py
 !/verify.py
+!/serve.py
+!/pages.py
 !/verify-live.sh
 !/releaser-secrets.sh
 !/.gitignore

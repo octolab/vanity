@@ -1,0 +1,22 @@
+/*
+ * go.octolab.org brand, loaded after globals.css, which is kept identical to
+ * octopot/indexit. Only the tokens differ: a cool paper, the deep navy of the
+ * ink and the teal of Go's own gopher blue, darkened to read on the paper; the
+ * gold of the 🤴 crown marks the go-import tag in the terminal.
+ *
+ * Both blocks restate every token they change: :root and .dark have the same
+ * specificity, so a :root rule here would also win over the dark theme.
+ * Contrast (WCAG): accent 6.3:1 and muted 6.0:1 on the paper, 5.6:1 and 5.3:1
+ * on the wash; in the dark, accent 10.1:1 and muted 7.6:1.
+ */
+:root {
+  --paper: #f7f8fa; --ink: #14202e; --muted: #56626f; --line: #dbe1e8;
+  --accent: #00677f; --wash: #ebf0f4; --card: #ffffff;
+  --glow: #7fd6ea; --gold: #f0c674; --foam: #e2f2f6; --shadow: 20 50 80;
+}
+.dark {
+  --paper: #0e131a; --ink: #e5ecf2; --muted: #9eabb8; --line: #25303c;
+  --accent: #6fd0e6; --wash: #17202a; --card: #121921;
+  --glow: #7fd6ea; --gold: #f0c674; --foam: #10303a; --shadow: 0 0 0;
+}
+::selection { background: #bfe8f2; color: #14202e; }

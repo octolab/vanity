@@ -1,0 +1,53 @@
+---
+title: The Go modules of OctoLab, at their own address.
+description: Tools, libraries and templates of OctoLab under go.octolab.org. Every import path is a page for you and an answer for go get, linked to the module's documentation, repository and own site.
+---
+
+import { Groups, Hero, How, Private, Unlisted, Updated } from '../components/catalog'
+
+<div className="vanity-home">
+  <Hero />
+
+  <ol className="flow-strip" aria-label="How a release reaches you">
+    <li>signed tag <b>a module releases</b></li>
+    <li aria-hidden="true">→</li>
+    <li>vanity-action <b>writes its entry</b></li>
+    <li aria-hidden="true">→</li>
+    <li>go.octolab.org <b>a page per package</b></li>
+    <li aria-hidden="true">→</li>
+    <li>go get · you <b>read the same page</b></li>
+  </ol>
+
+  <Groups />
+
+  <Unlisted />
+
+  <Private />
+
+  <How />
+
+  <section className="vanity-notes" id="notes" aria-labelledby="notes-title">
+    <div className="section-heading">
+      <p className="eyebrow">GOOD TO KNOW</p>
+      <h2 id="notes-title">Import it by this path, and the rest follows.</h2>
+    </div>
+    <div className="note-grid">
+      <div>
+        <b>Always the go.octolab.org path</b>
+        <p>Import a module by its path here, not by its GitHub address: the module declares this path in its <code>go.mod</code>, and the go command refuses the other one.</p>
+      </div>
+      <div>
+        <b>Versions are the repository’s tags</b>
+        <p>A card shows the version the catalog knows from the module’s last release. <code>go get …@latest</code> asks the module proxy, which may already know a newer tag.<Updated /></p>
+      </div>
+      <div>
+        <b>Documentation lives on pkg.go.dev</b>
+        <p>Each public package links its API reference there. The guides of a tool are on its own site, linked from its card.</p>
+      </div>
+      <div>
+        <b>Something broken?</b>
+        <p>Report an import path that does not resolve in the <a href="https://github.com/octolab/vanity/issues">issues of the catalog</a>; anything about the code belongs to the module’s own repository.</p>
+      </div>
+    </div>
+  </section>
+</div>

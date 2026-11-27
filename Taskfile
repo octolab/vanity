@@ -13,6 +13,7 @@ include=(
   "${root}"/bin/lib/git/*.bash
   "${root}"/bin/lib/config/*.bash
   "${root}"/bin/lib/core/*.bash
+  "${root}"/bin/lib/docs/*.bash
   "${root}"/bin/lib/main.bash
 )
 

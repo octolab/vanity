@@ -1,0 +1,42 @@
+<!doctype html>
+<!-- The social preview of the catalog page: render it with og.mjs to public/og.png.
+     It names no module and no version, so neither a release nor a new module changes it. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  :root { --paper: #f7f8fa; --ink: #14202e; --muted: #56626f; --line: #dbe1e8; --accent: #00677f; --wash: #ebf0f4; --card: #ffffff; --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace; }
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1733px; height: 908px; overflow: hidden; background: var(--paper); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .og { display: grid; grid-template-columns: 1fr 700px; gap: 70px; align-items: center; height: 100%; padding: 0 96px; }
+  .wordmark { display: flex; align-items: center; gap: 18px; font-size: 44px; font-weight: 750; letter-spacing: -1.5px; }
+  .wordmark img { width: 58px; height: 58px; }
+  h1 { margin: 64px 0 0; font-size: 104px; line-height: 1.04; font-weight: 650; letter-spacing: -.06em; }
+  h1 em { font-style: normal; color: var(--accent); }
+  .command { display: inline-flex; gap: 18px; margin-top: 60px; padding: 22px 30px; border-radius: 16px; background: #101a26; color: #e8f0f6; font: 30px/1.4 var(--mono); }
+  .command span { color: #7fd6ea; }
+  .readers { display: grid; gap: 26px; }
+  .reader { padding: 30px 34px; border: 2px solid var(--line); border-radius: 22px; background: var(--card); box-shadow: 14px 16px 0 var(--wash); }
+  .reader small { display: block; margin-bottom: 14px; color: var(--accent); font: 600 18px/1.4 var(--mono); letter-spacing: .12em; }
+  .reader b { display: block; font-size: 36px; letter-spacing: -1px; }
+  .reader span { display: block; margin-top: 10px; color: var(--muted); font: 21px/1.5 var(--mono); }
+  .reader.go { background: #101a26; border-color: #24364a; color: #e8f0f6; }
+  .reader.go small { color: #7fd6ea; }
+  .reader.go span { color: #c6d4e0; }
+  .reader.go i { font-style: normal; color: #f0c674; }
+</style>
+</head>
+<body>
+  <main class="og">
+    <div>
+      <div class="wordmark"><img src="../public/icon.svg" alt="">go.octolab.org</div>
+      <h1>One import path, <em>two readers.</em></h1>
+      <div class="command"><span>$</span>go get go.octolab.org/…</div>
+    </div>
+    <div class="readers">
+      <div class="reader"><small>YOU, IN A BROWSER</small><b>The module’s page</b><span>version · packages · docs · source · site</span></div>
+      <div class="reader go"><small>GO GET, ?go-get=1</small><b>The same page</b><span><i>&lt;meta name="go-import"</i> … github.com/…<i>&gt;</i></span></div>
+    </div>
+  </main>
+</body>
+</html>
