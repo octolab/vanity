@@ -1,11 +1,11 @@
 version: 2
 
 updates:
-  # / covers .github/workflows, not local actions
   - package-ecosystem: github-actions
-    directories: [ '/', '/.github/actions/*' ]
+    directory: /
     schedule:
-      interval: daily
+      interval: weekly
+      day: monday
       time: '05:00'
       timezone: UTC
     labels:
@@ -15,13 +15,12 @@ updates:
     commit-message:
       prefix: 'ci/cd'
       include: 'scope'
-    open-pull-requests-limit: 30
 
-  # the catalog page in docs/; the catalog itself has no npm dependencies
   - package-ecosystem: npm
     directory: /docs/
     schedule:
-      interval: daily
+      interval: weekly
+      day: monday
       time: '05:00'
       timezone: UTC
     labels:
@@ -31,4 +30,3 @@ updates:
     commit-message:
       prefix: 'docs'
       include: 'scope'
-    open-pull-requests-limit: 30
