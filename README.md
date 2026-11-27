@@ -8,8 +8,29 @@ Vanity URLs for OctoLab's Go modules.
 
 Every module served under `go.octolab.org` has an entry in [`modules/`](modules):
 one JSON file that its project writes when it releases. The site is rendered
-from these entries only: vanity never checks out a module and its delivery
-holds no secret that reads another repository.
+from these entries and the hand-written cards of [`docs/catalog.json`](docs/catalog.json):
+vanity never checks out a module and its delivery holds no secret that reads
+another repository. Before a deploy, the build only downloads public modules
+from GitHub with the go command, as anyone can, to prove that `go get` works
+with the new pages (`make resolve`).
+
+## 🌐 One address, two readers
+
+Every address of go.octolab.org answers a person and the go command alike:
+
+- `/` is the catalog: every module with what it is, the version the catalog
+  knows, the command to get it and links to its documentation on pkg.go.dev,
+  its repository and its own site. A person reads the cards, written by hand
+  in [`docs/catalog.json`](docs/catalog.json); everything that changes with a
+  release comes from the entries and the catalog tags.
+- `/<path>/` is the page of a module, a package or a directory of one: its
+  import path, version, packages below it and the same links. No redirect.
+- The go command asks for the same addresses with `?go-get=1` and reads the
+  `go-import` and `go-source` tags, which come first in the head of every
+  page, the catalog included.
+
+How a module gets its card, and the rules that keep both readers working, are
+in [AGENTS.md](AGENTS.md).
 
 ## 📦 How a project publishes itself
 
@@ -199,28 +220,52 @@ packages or topics of an entry.
 
 ## 🔗 Dependencies
 
-- Python 3.9+ and Git: `bin/catalog.py` and `bin/verify.py` use the standard
-  library only, and the workflows run the `python3` of the runner image.
-- Bash 4+ and Go only for the local tasks of `./Taskfile`: `make check`, the
-  smoke test of the live site.
+- Python 3.9+ and Git: `bin/catalog.py`, `bin/verify.py`, `bin/pages.py` and
+  `bin/serve.py` use the standard library only, and the workflows run the
+  `python3` of the runner image.
+- Node 24 and the locked npm dependencies of `docs/` for the catalog page
+  (`make deps`); [docs/README.md](docs/README.md) has the details.
+- Bash 4+ and Go for the local tasks of `./Taskfile`: `make check`, the smoke
+  test of the live site, and `make resolve`, the go command against a build.
 - Only for the one-off seed: Go and the GitHub CLI with read access to the
   private repositories.
 
 ## Build and verify
 
 ```sh
-make validate  # check the entries and the catalog invariants
+make validate  # check the entries, the catalog invariants and the cards
 make list      # print the manifest built from the entries
-make           # validate, render and verify dist/ before replacing the previous build
+make deps      # npm ci in docs/, once
+make           # build the catalog page, render the import pages, lay one over the other,
+               # verify dist/ before replacing the previous build
+make pages     # the import pages and modules.yml only, without Node
 make verify    # check all module roots and package pages of dist/ again
 make test      # tests of the catalog tools
+make serve     # serve dist/ at http://127.0.0.1:8040/ as GitHub Pages would
+make resolve   # run the go command against dist/ instead of the live site
 ```
 
-`bin/verify.py` checks `go-import`, `go-source` (repository and branch) and the
-redirect to pkg.go.dev of every page against the entries, and that pages and
-published packages match. With `--url https://go.octolab.org` it checks the
-live site (`--packages` for every package), including a 404 for an unknown
-path.
+`./Taskfile demo` does `make` and `make serve` in one go, for a local
+demonstration: open <http://127.0.0.1:8040/> and any import path under it,
+or ask as the go command does:
+`curl -sL 'http://127.0.0.1:8040/toolset/indexit?go-get=1' | grep go-import`.
+
+`bin/verify.py` checks every page against the entries: `go-import` and
+`go-source` (repository and branch) exactly once and first in the head, no
+redirect, a link to pkg.go.dev for a package of a public module and none for
+a private one, and that pages and published packages match. With
+`--url https://go.octolab.org` it checks the live site (`--packages` for every
+package), including a 404 for an unknown path.
+
+`make resolve` (`./Taskfile resolve`) runs the real go command against the
+build in `dist/`: `bin/serve.py --go` serves it as go.octolab.org to a go
+command with an empty module cache, `GOPROXY=direct` and the checksum
+database on, which downloads the root module, the toolkits and a package path
+from GitHub. The delivery blocks on it before every deploy. `./Taskfile
+resolve --all` does the same for every released public module, without the
+checksum database for go.octolab.org (a first release is not on the live site
+yet); the delivery only warns about it, because what a publisher writes must
+never stop the deploy.
 
 ## GitHub Pages and HTTPS
 
@@ -239,8 +284,19 @@ serves its default certificate, which does not cover `go.octolab.org`.
 Verify the domain under [the organization's Pages settings](https://github.com/organizations/octolab/settings/pages)
 and keep the TXT record. See [GitHub's domain verification instructions](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages).
 
-**Continuous delivery** runs on a push to `main` that changes the catalog or
-its tools, monthly, and on dispatch. It needs no secret but `SLACK_WEBHOOK`.
+[`.github/settings.json`](.github/settings.json) declares the three settings.
+Before it builds, the delivery compares them with the Pages configuration on
+GitHub (`python3 bin/pages.py settings`, with the workflow token) and stops
+on a difference; after the deploy it checks from outside that
+`http://go.octolab.org/` answers a permanent redirect to `https://`, the
+catalog page with its assets and its own 404, and a card per module at the
+version of the catalog (`python3 bin/pages.py smoke`).
+`python3 bin/pages.py doctor` runs the same checks on demand.
+
+**Continuous delivery** runs on a push to `main` that changes the catalog, its
+cards, the catalog page or its tools, monthly, and on dispatch. It needs no
+secret but `SLACK_WEBHOOK`. Dependabot proposes updates of the actions and of
+the npm dependencies of `docs/` daily.
 
 After a deploy:
 
