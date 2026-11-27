@@ -1,0 +1,257 @@
+{
+  "groups": [
+    {
+      "id": "tools",
+      "eyebrow": "01 / TOOLS",
+      "title": "Command-line tools, each with its own site.",
+      "lead": "Released from signed tags. A release publishes its module here, and the card shows the version go.octolab.org serves."
+    },
+    {
+      "id": "libraries",
+      "eyebrow": "02 / LIBRARIES",
+      "title": "Packages for your own Go code.",
+      "lead": "The root module and the toolkits around it. Import them with their go.octolab.org path; the API reference lives on pkg.go.dev."
+    },
+    {
+      "id": "templates",
+      "eyebrow": "03 / TEMPLATES",
+      "title": "Where a new module, tool or service starts.",
+      "lead": "Project templates with their build, checks and release pipeline already in place."
+    },
+    {
+      "id": "more",
+      "eyebrow": "04 / UTILITIES AND EARLIER PROJECTS",
+      "title": "Small utilities and the services of earlier years.",
+      "lead": "Still resolvable under their import paths. Most of them have not released through the catalog yet: go get takes the latest tag or commit of the repository."
+    }
+  ],
+  "items": [
+    {
+      "module": "go.octolab.org/toolset/maintainer",
+      "group": "tools",
+      "kind": "tool",
+      "emoji": "👨‍🔧",
+      "title": "maintainer",
+      "tagline": "See all of your open source. Move it every day.",
+      "summary": "A local hub shows every checkout and every issue across your repositories in one place, and one CLI keeps the checkouts current and plans your next contribution.",
+      "site": "https://maintainer.octolab.org/",
+      "releaseNotes": "https://maintainer.octolab.org/changelog/v{version}/",
+      "install": "brew install --formula octolab/tap/maintainer"
+    },
+    {
+      "module": "go.octolab.org/toolset/indexit",
+      "group": "tools",
+      "kind": "tool",
+      "emoji": "🗃️",
+      "title": "indexit",
+      "tagline": "Your Telegram. Your data.",
+      "summary": "Describe Telegram users, bots and channels, export conversations as JSON Lines and keep the photos of a post in your notes, served by a local image service.",
+      "site": "https://indexit.octolab.org/",
+      "releaseNotes": "https://indexit.octolab.org/changelog/v{version}/",
+      "install": "brew install --formula octolab/tap/indexit"
+    },
+    {
+      "module": "go.octolab.org/toolset/pulse",
+      "group": "tools",
+      "kind": "tool",
+      "emoji": "📰",
+      "title": "pulse",
+      "tagline": "Your morning, with a hand on the pulse.",
+      "summary": "The GitHub trends of trendshift.io and github.com as one calm morning paper that shows only what you have not seen. Keep what matters in one click.",
+      "site": "https://pulse.octolab.org/",
+      "releaseNotes": "https://pulse.octolab.org/changelog/v{version}/",
+      "install": "brew install --formula octolab/tap/pulse"
+    },
+    {
+      "module": "go.octolab.org",
+      "group": "libraries",
+      "kind": "library",
+      "emoji": "🧰",
+      "title": "pkg",
+      "tagline": "Go packages.",
+      "summary": "The root module of go.octolab.org: small packages for everyday Go code, among them async, errors, safe, sequence, strings, sync and testing."
+    },
+    {
+      "module": "go.octolab.org/toolkit/cli",
+      "group": "libraries",
+      "kind": "library",
+      "emoji": "💾",
+      "title": "cli",
+      "tagline": "Toolkit for command line interfaces.",
+      "summary": "Packages for command-line programs: helpers for cobra, a debugger, errors and a graceful shutdown."
+    },
+    {
+      "module": "go.octolab.org/toolkit/config",
+      "group": "libraries",
+      "kind": "library",
+      "emoji": "🎛️",
+      "title": "config",
+      "tagline": "Configuration toolkit.",
+      "summary": "Configuration of a Go program, with a package for its HTTP settings."
+    },
+    {
+      "module": "go.octolab.org/toolkit/protocol",
+      "group": "libraries",
+      "kind": "library",
+      "emoji": "📡",
+      "title": "protocol",
+      "tagline": "Toolkit for service communication protocols.",
+      "summary": "HTTP for services: headers, a server, middleware for chi and a REST router."
+    },
+    {
+      "module": "go.octolab.org/propaganda",
+      "group": "libraries",
+      "kind": "library",
+      "emoji": "📢",
+      "title": "propaganda",
+      "tagline": "HTTP-kit to propagate headers.",
+      "summary": "Middleware and a round tripper that carry headers from the request a service receives to the requests it makes."
+    },
+    {
+      "module": "go.octolab.org/template/module",
+      "group": "templates",
+      "kind": "template",
+      "emoji": "📐",
+      "title": "go-module",
+      "tagline": "Template for a typical module written in Go.",
+      "summary": "A library module with its Makefile, linters, tests and release workflow ready on the first commit."
+    },
+    {
+      "module": "go.octolab.org/template/tool",
+      "group": "templates",
+      "kind": "template",
+      "emoji": "📐",
+      "title": "go-tool",
+      "tagline": "Template for a typical CLI tool written in Go.",
+      "summary": "A command-line tool with its commands, configuration, build and release pipeline in place.",
+      "site": "https://go-tool.octolab.org/"
+    },
+    {
+      "module": "go.octolab.org/template/service",
+      "group": "templates",
+      "kind": "template",
+      "emoji": "📐",
+      "title": "go-service",
+      "tagline": "Template for a typical service written in Go.",
+      "summary": "A service and its client over an RPC API, with the build and release pipeline that a new service starts with.",
+      "site": "https://go-service.octolab.org/"
+    },
+    {
+      "module": "go.octolab.org/toolset/try",
+      "group": "more",
+      "kind": "tool",
+      "emoji": "♻️",
+      "title": "try",
+      "tagline": "Execute terminal commands with retries.",
+      "summary": "A command-line tool on top of the kamilsk/retry package: run a command again until it succeeds, with a limit and a backoff.",
+      "install": "go install go.octolab.org/toolset/try@latest"
+    },
+    {
+      "module": "go.octolab.org/toolset/breakit",
+      "group": "more",
+      "kind": "tool",
+      "emoji": "⏲️",
+      "title": "breakit",
+      "tagline": "Execute commands for a limited time.",
+      "summary": "Run a command and stop it after a deadline, as in breakit after 10m -- server run.",
+      "install": "go install go.octolab.org/toolset/breakit@latest"
+    },
+    {
+      "module": "go.octolab.org/toolset/parallel",
+      "group": "more",
+      "kind": "tool",
+      "emoji": "🚦",
+      "title": "parallel",
+      "tagline": "Execute terminal commands in parallel.",
+      "summary": "A command-line tool on top of the kamilsk/semaphore package: queue commands and run them with a limit on how many run at once.",
+      "install": "go install go.octolab.org/toolset/parallel@latest"
+    },
+    {
+      "module": "go.octolab.org/toolset/testit",
+      "group": "more",
+      "kind": "tool",
+      "emoji": "👨‍🍳",
+      "title": "testit",
+      "tagline": "Extended testing toolset, taste it.",
+      "summary": "Shortcuts around go test, such as compiling every package without running a test, and output with absolute paths, colors and stack traces.",
+      "install": "go install go.octolab.org/toolset/testit@latest"
+    },
+    {
+      "module": "go.octolab.org/toolset/tuna",
+      "group": "more",
+      "kind": "tool",
+      "emoji": "🐟",
+      "title": "Tuna",
+      "tagline": "Dead simple prompt tuner.",
+      "summary": "Test and compare LLM prompts across several models from the command line: write the prompts, define test queries and see how each model responds.",
+      "install": "go install go.octolab.org/toolset/tuna@latest"
+    },
+    {
+      "module": "go.octolab.org/toolset/fiddle",
+      "group": "more",
+      "kind": "tool",
+      "emoji": "🎻",
+      "title": "fiddle",
+      "tagline": "The missing RSS manager.",
+      "summary": "An RSS manager at its very start: the repository still holds the CLI template it grows from.",
+      "install": "go install go.octolab.org/toolset/fiddle@latest"
+    },
+    {
+      "module": "go.octolab.org/ecosystem/forma",
+      "group": "more",
+      "kind": "service",
+      "emoji": "📇",
+      "title": "Forma",
+      "tagline": "Data Collector as a Service.",
+      "summary": "Your personal server for HTML forms, with accounts and a command line to manage them.",
+      "site": "https://hugs.octolab.net/"
+    },
+    {
+      "module": "go.octolab.org/ecosystem/guard",
+      "group": "more",
+      "kind": "service",
+      "emoji": "💂‍♂️",
+      "title": "Guard",
+      "tagline": "Paywall as a Service.",
+      "summary": "Your personal guard that restricts access to content to those with a paid subscription.",
+      "site": "https://hugs.octolab.net/"
+    },
+    {
+      "module": "go.octolab.org/ecosystem/passport",
+      "group": "more",
+      "kind": "service",
+      "emoji": "👮",
+      "title": "Passport",
+      "tagline": "Person Identifier as a Service.",
+      "summary": "Your personal user tracker and authentication service.",
+      "site": "https://hugs.octolab.net/"
+    },
+    {
+      "module": "go.octolab.org/ecosystem/tablo",
+      "group": "more",
+      "kind": "service",
+      "emoji": "🧐",
+      "title": "Tablo",
+      "tagline": "The one point of view to all your task boards.",
+      "summary": "A service that brings task boards from GitHub and Trello into one view."
+    },
+    {
+      "module": "go.octolab.org/ecosystem/sparkle",
+      "group": "more",
+      "kind": "service",
+      "emoji": "✨",
+      "title": "sparkle",
+      "tagline": "A personal development framework and knowledge platform.",
+      "summary": "The service of the Sparkle framework for personal knowledge management, with its sparkle command line."
+    },
+    {
+      "module": "go.octolab.org/ecosystem/telemost",
+      "group": "more",
+      "kind": "service",
+      "emoji": "🌉",
+      "title": "telemost",
+      "tagline": "Telegram bridge for AI and automation.",
+      "summary": "A service at its very start: the repository still holds the service template it grows from."
+    }
+  ]
+}

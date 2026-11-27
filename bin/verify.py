@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 """Check vanity discovery against the entries in modules/, locally or over HTTPS.
 
-For every page: go-import names the module and its repository, go-source its
-repository and default branch, and the refresh and the link lead to the
-package on pkg.go.dev. Locally, every published package has a page and no page
-is outside the declared packages of its module (the build also writes the
-parent directories of packages inside a module). With --url, the module roots
-(or, with --packages, every published package and the served modules.yml, which
-must equal the manifest of the entries) are fetched over verified HTTPS, and a
-path outside the catalog must answer 404.
+Every page serves two readers. For the go command: go-import names the module
+and its repository, go-source its repository and default branch, both exactly
+once and first in the head, before any script or style, so that go's parser,
+which reads the head until it meets something it cannot read, finds them.
+For people: no redirect, and the page of a published package of a public
+module links its documentation on pkg.go.dev; a page of a private module
+links nothing there (pkg.go.dev never shows it). The page of the root module
+is the catalog page when the build lays it over /.
+
+Locally, every published package has a page and no page is outside the
+declared packages of its module (the build also writes the parent directories
+of packages inside a module). With --url, the module roots (or, with
+--packages, every published package and the served modules.yml, which must
+equal the manifest of the entries) are fetched over verified HTTPS, and a path
+outside the catalog must answer 404.
 """
 
 import argparse
@@ -29,19 +36,37 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 class Metadata(HTMLParser):
+    """The discovery tags, the redirects and the links of a page, and whether the
+    discovery tags come first in the head."""
+
     def __init__(self):
         super().__init__()
         self.meta = {}
         self.links = []
+        self.in_head = False
+        self.seen_other = False  # a script, style or link seen in the head
+        self.late = []  # discovery tags after one of those, or outside the head
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
+        if tag == "head":
+            self.in_head = True
+        elif tag == "body":
+            self.in_head = False
         if tag == "meta":
-            key = attrs.get("name") or attrs.get("http-equiv")
+            key = (attrs.get("name") or attrs.get("http-equiv") or "").lower()
             if key in ("go-import", "go-source", "refresh"):
                 self.meta.setdefault(key, []).append(attrs.get("content", ""))
+            if key in ("go-import", "go-source") and (self.seen_other or not self.in_head):
+                self.late.append(key)
+        elif tag in ("script", "style", "link", "noscript", "template"):
+            self.seen_other = True
         elif tag == "a" and "href" in attrs:
             self.links.append(attrs["href"])
+
+    def handle_endtag(self, tag):
+        if tag == "head":
+            self.in_head = False
 
 
 def owner(package, modules):
@@ -64,16 +89,17 @@ def pages_of(modules):
     return pages
 
 
+DOCS = "https://pkg.go.dev/"
+
+
 def expected(package, e):
     url, branch, module = e["repository"], e["branch"], e["module"]
-    docs = f"https://pkg.go.dev/{package}"
     return {
         "go-import": [f"{module} git {url}"],
         "go-source": [
             f"{module} {url} {url}/tree/{branch}{{/dir}} {url}/blob/{branch}{{/dir}}/{{file}}#L{{line}}"
         ],
-        "refresh": [f"0; url={docs}"],
-        "links": [docs],
+        "refresh": [],
     }
 
 
@@ -81,14 +107,29 @@ def verify(html, package, modules, pages=None):
     module = (pages or {}).get(package) or owner(package, modules)
     if module is None:
         raise ValueError(f"{package}: no module in the catalog serves it")
-    want = expected(package, modules[module])
+    e = modules[module]
+    want = expected(package, e)
     page = Metadata()
     page.feed(html)
     got = {key: page.meta.get(key, []) for key in ("go-import", "go-source", "refresh")}
-    got["links"] = page.links
     for key in want:
         if got[key] != want[key]:
             raise ValueError(f"{package}: {key}: expected {want[key]}, got {got[key]}")
+    if page.late:
+        raise ValueError(f"{package}: {', '.join(page.late)} must come first in the head, "
+                         "before any script, style or link")
+    # links to the documentation of this module's own packages: the catalog page
+    # at / also links other modules, which are not the root module's
+    def owned(link):
+        path = link[len(DOCS):].split("?")[0].split("#")[0]
+        return ((pages or {}).get(path) or owner(path, modules)) == module
+
+    docs = [link for link in page.links if link.startswith(DOCS) and owned(link)]
+    if e["visibility"] != "public":
+        if docs:
+            raise ValueError(f"{package}: a page of the private module {module} links pkg.go.dev: {docs[0]}")
+    elif package[len(module):] in e["packages"] and DOCS + package not in docs:
+        raise ValueError(f"{package}: no link to its documentation, {DOCS}{package}")
 
 
 def entries(root):
@@ -99,13 +140,18 @@ def entries(root):
     return {e["module"]: e for e in found}
 
 
-def local(directory, modules):
+def local(directory, modules, catalog_page=False):
+    """Check a build in directory. catalog_page: / is the catalog page laid over the
+    root module's import page, with files of its own under _next/ and the like."""
     published = {e["module"] + p for e in modules.values() for p in e["packages"]}
     rendered = pages_of(modules)
     allowed = set(rendered)
     pages = {}
     for page in sorted(directory.rglob("index.html")):
         relative = page.parent.relative_to(directory).as_posix()
+        # a path segment of a module never starts with "_": these are the site's own
+        if catalog_page and relative.startswith("_"):
+            continue
         pages[HOST if relative == "." else HOST + "/" + relative] = page
     missing = sorted(published - set(pages))
     if missing:
@@ -114,7 +160,9 @@ def local(directory, modules):
     if extra:
         raise ValueError(f"Pages outside the catalog: {', '.join(extra[:10])}")
     for package, page in pages.items():
-        verify(page.read_text(), package, modules, rendered)
+        verify(page.read_text(encoding="utf-8"), package, modules, rendered)
+    if catalog_page and not (directory / "404.html").is_file():
+        raise ValueError("The catalog page has no 404.html: Pages would answer a missing path with its own")
     print(f"Verified {len(modules)} module roots, {len(published)} packages and {len(pages)} pages")
 
 
@@ -122,7 +170,7 @@ def fetch(url):
     with urlopen(url, timeout=30) as response:
         if not response.url.startswith("https://"):
             raise ValueError(f"Redirected to insecure URL: {response.url}")
-        return response.read().decode()
+        return response.read().decode("utf-8")
 
 
 def probe(modules):
@@ -209,7 +257,8 @@ def main():
     if args.attempts < 1 or args.delay < 0:
         parser.error("--attempts must be at least 1 and --delay not negative")
     if not args.url:
-        local(args.directory, entries(args.root))
+        # a build with the catalog page laid over / (bin/catalog.py build --site)
+        local(args.directory, entries(args.root), catalog_page=(args.directory / "_next").is_dir())
         return
     if not args.url.startswith("https://"):
         parser.error("--url must use HTTPS")

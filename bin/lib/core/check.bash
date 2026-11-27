@@ -10,8 +10,9 @@
 # version that the consumer's CI uses. Exit status 0 means both steps passed.
 check() (
   # 1. Metadata: over verified HTTPS (the certificate must cover the domain),
-  #    the go-import, go-source and redirect of each module root must match its
-  #    entry in modules/, and a path outside the catalog must answer 404.
+  #    the go-import and go-source of each module root must match its entry in
+  #    modules/, come first in the head, the page must link its documentation
+  #    and not redirect, and a path outside the catalog must answer 404.
   python3 "${root}/bin/verify.py" --root "${root}" --url https://go.octolab.org \
     --module go.octolab.org \
     --module go.octolab.org/toolkit/cli \
