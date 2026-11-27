@@ -39,13 +39,44 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
+      # the full history gives every card the date of its release (catalog tags)
       - name: Checkout the repository
         uses: actions/checkout@v7.0.1
-        with: { persist-credentials: false }
+        with: { fetch-depth: 0, fetch-tags: true, persist-credentials: false }
 
       - name: Run the tests
         run: make test
-      - name: Check the catalog
+      - name: Check the catalog and its cards
         run: make validate
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+          check-latest: true
+      - name: Install the dependencies of the catalog page
+        run: make deps
       - name: Build static HTML
         run: make
+      # the go command against this build, not the live site
+      - name: Set up Go environment
+        uses: actions/setup-go@v7.1.0
+        with: { go-version: 1.27.4, cache: false }
+      # modules the maintainer chose, which sum.golang.org already knows
+      - name: Resolve modules through this build
+        timeout-minutes: 10
+        run: ./Taskfile resolve
+      # every released public module: what a publisher wrote, so a warning only
+      - name: Resolve every released module through this build
+        id: all
+        continue-on-error: true
+        # repositories a publisher names: a stalled clone must not hold the queue
+        timeout-minutes: 10
+        run: ./Taskfile resolve --all
+      - name: Warn about modules that do not resolve
+        if: steps.all.outcome == 'failure'
+        run: echo '::warning title=Resolve::A released module does not resolve through this build; see the step above. The delivery would deploy anyway.'
+      - name: Upload the site
+        uses: actions/upload-artifact@v7.0.2
+        with: { name: site, path: dist, retention-days: 7 }

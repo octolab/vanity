@@ -11,8 +11,10 @@ on:
     branches: [ main ]
     paths:
       - '.github/actions/**'
+      - '.github/settings.json'
       - '.github/workflows/cd.urls.yml'
       - 'bin/**'
+      - 'docs/**'
       - 'modules/**'
       - 'Makefile'
       - 'Taskfile'
@@ -49,7 +51,9 @@ env:
   MAINTAINER_LOGIN: kamilsk
   MAINTAINER_ID: '1165416'
   # bin/ needs only the standard library of Python 3.9+: every job runs the
-  # python3 of the runner image (3.12 on ubuntu-24.04), nothing is downloaded
+  # python3 of the runner image (3.12 on ubuntu-24.04); the catalog page in
+  # docs/ is built with Node and its locked npm dependencies, the maintainer's
+  # like everything outside modules/ (the gate checks it)
 
 jobs:
   gate:
@@ -286,10 +290,13 @@ jobs:
       pages: read
 
     steps:
+      # the full history gives every card the date of its release (catalog tags)
       - name: Checkout the repository
         uses: actions/checkout@v7.0.1
         with:
           ref: ${{ github.sha }}
+          fetch-depth: 0
+          fetch-tags: true
           persist-credentials: false
       - name: Set up GitHub Pages
         id: pages
@@ -302,9 +309,44 @@ jobs:
             echo '::error::Set go.octolab.org as the custom domain in Settings > Pages before deploying.'
             exit 1
           fi
+      # the source, the domain and Enforce HTTPS, as .github/settings.json declares
+      - name: Check the Pages settings
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 bin/pages.py settings
 
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+          check-latest: true
+      - name: Install the dependencies of the catalog page
+        run: make deps
+      # the catalog page laid over the import pages, verified page by page
       - name: Build static HTML
+        env:
+          SITE_URL: ${{ steps.pages.outputs.base_url }}/
         run: make
+      # the go command against this build, before it is deployed
+      - name: Set up Go environment
+        uses: actions/setup-go@v7.1.0
+        with: { go-version: 1.27.4, cache: false }
+      # modules the maintainer chose, which sum.golang.org already knows
+      - name: Resolve modules through this build
+        timeout-minutes: 10
+        run: ./Taskfile resolve
+      # every released public module: what a publisher wrote, so a warning only
+      - name: Resolve every released module through this build
+        id: all
+        continue-on-error: true
+        # repositories a publisher names: a stalled clone must not hold the queue
+        timeout-minutes: 10
+        run: ./Taskfile resolve --all
+      - name: Warn about modules that do not resolve
+        if: steps.all.outcome == 'failure'
+        run: echo '::warning title=Resolve::A released module does not resolve through this build; see the step above. The deploy goes on.'
       - name: Upload the site
         uses: actions/upload-pages-artifact@v5.0.0
         with: { path: dist }
@@ -388,6 +430,11 @@ jobs:
         run: |
           python3 bin/verify.py --url https://go.octolab.org --packages \
             ${BASE:+--previous "${BASE}"} --attempts 24 --delay 30
+      # the catalog page for people: assets, a card per module at its version,
+      # the site's 404, and http:// redirecting to https:// (Enforce HTTPS);
+      # Pages caches / for 10 minutes: 48 tries 15 s apart outlast it
+      - name: Smoke-test the catalog page
+        run: python3 bin/pages.py smoke https://go.octolab.org/ --retries 48
 
   # inline, not a local action: main may hold a publisher's change that the
   # gate rejected, and this job holds the Slack webhook
