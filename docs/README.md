@@ -85,7 +85,8 @@ PLAYWRIGHT_CORE=/path/to/playwright-core/index.mjs CHROME=/path/to/chrome node s
 `4.1.12` under `nextra-theme-docs` to avoid
 [a validation regression](https://github.com/shuding/nextra/issues/5036), and
 override the xmldom dependency of `speech-rule-engine@4.1.4`; the docs README
-of octomation/pulse says when to drop both. `npm audit` reports KaTeX and
-Mermaid inside Nextra, as on the sibling sites: the page renders no math and
-no diagram, and only its static export is published. Search is disabled: one
+of octomation/pulse says when to drop both. Overrides also lift KaTeX to
+0.18 and minimatch to 11, which Nextra 4.6.1 pins below their advisories;
+Zod stays vulnerable on purpose. `.github/self-control.md` lists every
+override, why it is there and when to drop it. Search is disabled: one
 page needs none.
